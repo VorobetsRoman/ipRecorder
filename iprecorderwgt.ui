@@ -46,6 +46,12 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="inputMask">
+        <string>0000</string>
+       </property>
+       <property name="text">
+        <string>5000</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -196,52 +202,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QFrame" name="frame_2">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(217, 217, 217);</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QRadioButton" name="rbTimeMarkerIsOn">
-        <property name="text">
-         <string>Включить временной маркер</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbSetPlaySpeed">
-        <property name="text">
-         <string>Установить скорость воспроизведения</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="hsPlaySpeed">
-        <property name="value">
-         <number>50</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="tabPlayRecord">
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -250,6 +211,13 @@
        <string>Tab 1</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Включить временной маркер</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
@@ -261,6 +229,12 @@
          </item>
          <item>
           <widget class="QLabel" name="lbFileNameForRecording">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="text">
             <string>Имя файла</string>
            </property>
@@ -298,6 +272,12 @@
          </item>
          <item>
           <widget class="QLabel" name="lbRecorded">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="text">
             <string>Записано:</string>
            </property>
@@ -308,6 +288,12 @@
          </item>
          <item>
           <widget class="QLabel" name="lbRecordedCount">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="text">
             <string>значение</string>
            </property>
@@ -315,6 +301,12 @@
          </item>
          <item>
           <widget class="QLabel" name="lbRecordedSize">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -325,12 +317,31 @@
          </item>
          <item>
           <widget class="QLabel" name="lb">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="text">
             <string>Мб</string>
            </property>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -339,6 +350,51 @@
        <string>Tab 2</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(217, 217, 217);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QRadioButton" name="rbSetPlaySpeed">
+            <property name="text">
+             <string>Установить скорость воспроизведения</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbTimeMarkerIsOn">
+            <property name="text">
+             <string>Включить временной маркер</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="hsPlaySpeed">
+            <property name="value">
+             <number>50</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+            <property name="tickInterval">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
