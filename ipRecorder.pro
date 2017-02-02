@@ -24,7 +24,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        iprecorderwgt.cpp
+        iprecorderwgt.cpp \
+    iprecorderwgtrp.cpp
 
 HEADERS  += iprecorderwgt.h
 

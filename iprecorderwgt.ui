@@ -65,6 +65,9 @@
    </item>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(217, 217, 217);</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -133,7 +136,10 @@
            </size>
           </property>
           <property name="inputMask">
-           <string>***.***.***.***</string>
+           <string>000.000.000.000</string>
+          </property>
+          <property name="text">
+           <string>127.0.0.1</string>
           </property>
          </widget>
         </item>
@@ -191,6 +197,9 @@
    </item>
    <item>
     <widget class="QFrame" name="frame_2">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(217, 217, 217);</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -234,7 +243,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
