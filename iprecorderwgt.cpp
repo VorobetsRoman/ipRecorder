@@ -151,7 +151,7 @@ void IpRecorderWgt::on_pbStartStopRecord_released()
     else {
         if (!workFile.isOpen()) {
             workFile.setFileName(fileName);
-            workFile.open(QIODevice::ReadOnly);
+            workFile.open(QIODevice::WriteOnly);
         }
     }
     recordingOn = !recordingOn;
@@ -189,6 +189,8 @@ void IpRecorderWgt::on_pbStartStopPlayer_released()
 {
     if (playingOn) {
         playinGotoBegin();
+    }
+    else {
         if (!playTimer) {
             playTimer = new QTimer;
             connect(playTimer,  &QTimer         ::timeout,
@@ -275,7 +277,7 @@ void IpRecorderWgt::socketReadyRead()
 
     QByteArray ba = socket->readAll();
     qint64 packetSize = ba.size();
-    workFile.write((char*)(packetSize), sizeof(packetSize));
+    workFile.write((char*)&packetSize, sizeof(packetSize));
     qint64 saved = workFile.write(ba);
     if (saved < ba.size()) {
         QMessageBox::warning(0, "Ошибка", "В файл записалось меньше прочитанного, запись приостановлена");
@@ -303,7 +305,7 @@ void IpRecorderWgt::playTimerTimeoutSlot()
     if (!socket) return;
     if (socket->isOpen()) return;
 
-    qint64 packetSize = workFile.read((char*)packetSize, sizeof(packetSize));
+    qint64 packetSize = workFile.read((char*)&packetSize, sizeof(packetSize));
     QByteArray ba = workFile.read(packetSize);
     socket->write(ba);
 }
