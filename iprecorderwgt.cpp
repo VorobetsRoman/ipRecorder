@@ -15,7 +15,11 @@ IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
     ui(new Ui::IpRecorderWgt)
 {
     ui->setupUi(this);
+    recorderForm = ui->recorderWgt;
+    playerForm = ui->playerWgt;
+
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+
     ui->tabPlayRecord->setTabText(0, "Запись");
     ui->tabPlayRecord->setTabText(1, "Воспроизведение");
 }
@@ -28,10 +32,6 @@ IpRecorderWgt::~IpRecorderWgt()
 {
     if (server) server->deleteLater();
     if (socket) socket->deleteLater();
-    if (playTimer) {
-        playTimer->stop();
-        playTimer->deleteLater();
-    }
     closeConnectionTimer();
     delete ui;
 }
@@ -207,19 +207,19 @@ void IpRecorderWgt::socketReadyRead()
 {
     // Функция чтения данных из сокета
     // и записи данных в файл
-    if (fileName == "") return;
-    if (!recordingOn)   return;
-    if (recordingPaused) return;
+//    if (fileName == "") return;
+//    if (!recordingOn)   return;
+//    if (recordingPaused) return;
 
-    QByteArray ba = socket->readAll();
-    qint64 packetSize = ba.size();
-    workFile.write((char*)&packetSize, sizeof(packetSize));
-    qint64 saved = workFile.write(ba);
-    if (saved < ba.size()) {
-        QMessageBox::warning(0, "Ошибка", "В файл записалось меньше прочитанного, запись приостановлена");
-        recordingPaused = true;
+//    QByteArray ba = socket->readAll();
+//    qint64 packetSize = ba.size();
+//    workFile.write((char*)&packetSize, sizeof(packetSize));
+//    qint64 saved = workFile.write(ba);
+//    if (saved < ba.size()) {
+//        QMessageBox::warning(0, "Ошибка", "В файл записалось меньше прочитанного, запись приостановлена");
+//        recordingPaused = true;
         // добавить функцию остановки записи
-    }
+//    }
 }
 
 

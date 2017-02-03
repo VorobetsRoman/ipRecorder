@@ -204,7 +204,7 @@
    <item>
     <widget class="QTabWidget" name="tabPlayRecord">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -212,7 +212,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="RecorderForm" name="widget" native="true"/>
+        <widget class="RecorderForm" name="recorderWgt" native="true"/>
        </item>
       </layout>
      </widget>
@@ -222,7 +222,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="PlayerForm" name="widget_2" native="true"/>
+        <widget class="PlayerForm" name="playerWgt" native="true"/>
        </item>
       </layout>
      </widget>

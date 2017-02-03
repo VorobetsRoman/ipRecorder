@@ -1,5 +1,8 @@
 #include "recorderform.h"
 #include "ui_recorderform.h"
+#include <QFileDialog>
+#include <QApplication>
+#include <QMessageBox>
 
 
 
@@ -18,6 +21,12 @@ RecorderForm::RecorderForm(QWidget *parent) :
 //=================================== Деструктор
 RecorderForm::~RecorderForm()
 {
+    if (workFile){
+        if (workFile->isOpen()) {
+            workFile->close();
+        }
+        workFile->deleteLater();
+    }
     delete ui;
 }
 
@@ -28,8 +37,24 @@ RecorderForm::~RecorderForm()
 void RecorderForm::on_tbFileNameForRecording_released()
 {
     // Слот выбора файла для записи
-    fileName = QFileDialog::getSaveFileName(0, "Файл для записи", qApp->applicationDirPath(), "*.dat");
+    QString fileName = QFileDialog::getSaveFileName(0, "Файл для записи", qApp->applicationDirPath(), "*.dat");
     if (fileName == "") return;
+
+    if (!workFile) {
+        workFile = new QFile();
+    }
+    else {
+        if (workFile->isOpen()) {
+            workFile->close();
+        }
+    }
+
+    workFile->setFileName(fileName);
+    if (!workFile->open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
+        return;
+    }
+
     ui->lbFileNameForRecording->setText(fileName);
 }
 
@@ -40,17 +65,8 @@ void RecorderForm::on_tbFileNameForRecording_released()
 void RecorderForm::on_pbStartStopRecord_released()
 {
     if (recordingOn) {
-        if (workFile.isOpen()) {
-            if (workFile.openMode() == QIODevice::WriteOnly) {
-                workFile.close();
-            }
-        }
     }
     else {
-        if (!workFile.isOpen()) {
-            workFile.setFileName(fileName);
-            workFile.open(QIODevice::WriteOnly);
-        }
     }
     recordingOn = !recordingOn;
 }
@@ -61,11 +77,32 @@ void RecorderForm::on_pbStartStopRecord_released()
 //===================================
 void RecorderForm::on_pbPauseRecord_released()
 {
-    if (recordingPaused) {
+    if (pauseOn) {
 
     }
     else {
 
     }
-    recordingPaused = !recordingPaused;
+    pauseOn = !pauseOn;
 }
+
+
+
+
+//===================================
+void RecorderForm::writeToFile()
+{
+    if (!workFile) return;
+    if (!workFile->isOpen()) return;
+    if (!recordingOn) return;
+
+    QTcpSocket* socket = QTcpSocket*(sender());
+    QByteArray ba = socket->readAll();
+    qint64 packetSize = ba.size();
+    workFile->write((char*)&packetSize, sizeof(packetSize));
+    workFile->write(ba);
+}
+
+
+
+

@@ -6,6 +6,8 @@
 #include <QTcpSocket>
 #include <QTimer>
 #include <QFile>
+#include "playerform.h"
+#include "recorderform.h"
 
 
 
@@ -25,12 +27,6 @@ private slots:
     void on_pbStartServer_released          ();
     void on_rbClientChoice_toggled          (bool checked);
     void on_pbConnectToServer_released      ();
-    void on_hsPlaySpeed_sliderMoved         (int position);
-    void on_tbFileNameForRecording_released ();
-    void on_pbStartStopRecord_released      ();
-    void on_pbPauseRecord_released          ();
-    void on_tbFileNameForPlayer_released    ();
-    void on_pbStartStopPlayer_released      ();
 
     void newServerConnectionSlot            ();
     void socketConnected                    ();
@@ -41,31 +37,15 @@ private slots:
 
     void closeConnectionTimer               ();
 
-    void playTimerTimeoutSlot               ();
-
-    void on_rbTimeMarkerIsOn_toggled(bool checked);
-
-    void on_rbSetPlaySpeed_toggled(bool checked);
-
 private:
     Ui::IpRecorderWgt   *ui     {NULL};
     QTcpServer          *server {NULL};
     QTcpSocket          *socket {NULL};
-    QTimer              *connectionTimer    {NULL};
-    QTimer              *playTimer          {NULL};
-    QString             fileName {""};
-    QFile               workFile;
-
-    bool                recordingOn     {false};
-    bool                recordingPaused {false};
-    bool                playingOn       {false};
-    bool                playingPaused   {false};
-
-    int                 timeInterval    {200};
-    int                 defaultPlayInterval {200};
+    QTimer              *connectionTimer{NULL};
+    PlayerForm          *playerForm     {NULL};
+    RecorderForm        *recorderForm   {NULL};
 
     void connectToHost                      ();
-    void playinGotoBegin                    ();
 };
 
 #endif // IPRECORDERWGT_H

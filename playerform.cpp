@@ -26,8 +26,25 @@ PlayerForm::~PlayerForm()
 //===================================
 void PlayerForm::on_tbFileNameForPlayer_released()
 {
-    fileName = QFileDialog::getOpenFileName(0, "Файл для воспроизведения", qApp->applicationDirPath(), "*.dat");
+    // Слот выбора файла для воспроизведения
+    QString fileName = QFileDialog::getSaveFileName(0, "Файл для записи", qApp->applicationDirPath(), "*.dat");
     if (fileName == "") return;
+
+    if (!workFile) {
+        workFile = new QFile();
+    }
+    else {
+        if (workFile->isOpen()) {
+            workFile->close();
+        }
+    }
+
+    workFile->setFileName(fileName);
+    if (!workFile->open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
+        return;
+    }
+
     ui->lbFileNameForPlayer->setText(fileName);
 }
 
