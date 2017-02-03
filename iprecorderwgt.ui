@@ -204,7 +204,7 @@
    <item>
     <widget class="QTabWidget" name="tabPlayRecord">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -212,136 +212,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QCheckBox" name="checkBox">
-         <property name="text">
-          <string>Включить временной маркер</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QToolButton" name="tbFileNameForRecording">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lbFileNameForRecording">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Имя файла</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <widget class="QPushButton" name="pbStartStopRecord">
-           <property name="maximumSize">
-            <size>
-             <width>25</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Старт</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbPauseRecord">
-           <property name="maximumSize">
-            <size>
-             <width>25</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>PushButton</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lbRecorded">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Записано:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lbRecordedCount">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>значение</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lbRecordedSize">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lb">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Мб</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        <widget class="RecorderForm" name="widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -351,104 +222,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QFrame" name="frame_2">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(217, 217, 217);</string>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QRadioButton" name="rbSetPlaySpeed">
-            <property name="text">
-             <string>Установить скорость воспроизведения</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rbTimeMarkerIsOn">
-            <property name="text">
-             <string>Включить временной маркер</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="hsPlaySpeed">
-            <property name="value">
-             <number>50</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="tickPosition">
-             <enum>QSlider::TicksBelow</enum>
-            </property>
-            <property name="tickInterval">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QToolButton" name="tbFileNameForPlayer">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lbFileNameForPlayer">
-           <property name="text">
-            <string>Имя файла</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QPushButton" name="pbStartStopPlayer">
-           <property name="maximumSize">
-            <size>
-             <width>25</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>PushButton</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbPauseRecord_2">
-           <property name="maximumSize">
-            <size>
-             <width>25</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>PushButton</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QProgressBar" name="progressPlayer">
-           <property name="value">
-            <number>24</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="PlayerForm" name="widget_2" native="true"/>
        </item>
       </layout>
      </widget>
@@ -457,6 +231,20 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>RecorderForm</class>
+   <extends>QWidget</extends>
+   <header location="global">recorderform.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PlayerForm</class>
+   <extends>QWidget</extends>
+   <header location="global">playerform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

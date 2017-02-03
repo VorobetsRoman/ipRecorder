@@ -43,6 +43,10 @@ private slots:
 
     void playTimerTimeoutSlot               ();
 
+    void on_rbTimeMarkerIsOn_toggled(bool checked);
+
+    void on_rbSetPlaySpeed_toggled(bool checked);
+
 private:
     Ui::IpRecorderWgt   *ui     {NULL};
     QTcpServer          *server {NULL};
@@ -58,6 +62,7 @@ private:
     bool                playingPaused   {false};
 
     int                 timeInterval    {200};
+    int                 defaultPlayInterval {200};
 
     void connectToHost                      ();
     void playinGotoBegin                    ();

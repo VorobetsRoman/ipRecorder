@@ -23,11 +23,15 @@ IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
 
 
 
-//===================================
+//=================================== Деструктор
 IpRecorderWgt::~IpRecorderWgt()
 {
     if (server) server->deleteLater();
     if (socket) socket->deleteLater();
+    if (playTimer) {
+        playTimer->stop();
+        playTimer->deleteLater();
+    }
     closeConnectionTimer();
     delete ui;
 }
@@ -35,7 +39,7 @@ IpRecorderWgt::~IpRecorderWgt()
 
 
 
-//===================================
+//=================================== Кнопка старт сервера
 void IpRecorderWgt::on_pbStartServer_released()
 {
     // Включение или выключение сервера.
@@ -67,7 +71,7 @@ void IpRecorderWgt::on_pbStartServer_released()
 
 
 
-//===================================
+//=================================== Отметка
 void IpRecorderWgt::on_rbClientChoice_toggled(bool checked)
 {
 
@@ -76,7 +80,7 @@ void IpRecorderWgt::on_rbClientChoice_toggled(bool checked)
 
 
 
-//===================================
+//=================================== Кнопка подключиться к серверу
 void IpRecorderWgt::on_pbConnectToServer_released()
 {
     // Запуск или остановка сокетного соединения с сервером
@@ -88,7 +92,15 @@ void IpRecorderWgt::on_pbConnectToServer_released()
         ui->pbConnectToServer->setText("Соединиться");
     }
     else if (ui->rbClientChoice->isChecked()) {
-        socket = new QTcpSocket();
+        if (!socket) {
+            socket = new QTcpSocket();
+            connect(socket, &QTcpSocket     ::connected,
+                    this,   &IpRecorderWgt  ::socketConnected   );
+            connect(socket, &QTcpSocket     ::disconnected,
+                    this,   &IpRecorderWgt  ::socketDisconnected);
+            connect(socket, &QTcpSocket     ::readyRead,
+                    this,   &IpRecorderWgt  ::socketReadyRead   );
+        }
         connectToHost();
         if (!connectionTimer) {
             connectionTimer = new QTimer();
@@ -102,128 +114,52 @@ void IpRecorderWgt::on_pbConnectToServer_released()
 
 
 
-//===================================
+//=================================== Слот нового подключения к серверу
 void  IpRecorderWgt::newServerConnectionSlot()
 {
     if (!socket) {
         socket = server->nextPendingConnection();
+
         connect(socket, &QTcpSocket     ::disconnected,
                 this,   &IpRecorderWgt  ::socketDisconnected);
         connect(socket, &QTcpSocket     ::readyRead,
                 this,   &IpRecorderWgt  ::socketReadyRead   );
-    }
-}
 
-
-
-
-//===================================
-void IpRecorderWgt::on_hsPlaySpeed_sliderMoved(int position)
-{
-
-}
-
-
-
-
-//===================================
-void IpRecorderWgt::on_tbFileNameForRecording_released()
-{
-    // Слот выбора файла для записи
-    fileName = QFileDialog::getSaveFileName(0, "Файл для записи", qApp->applicationDirPath(), "*.dat");
-    if (fileName == "") return;
-    ui->lbFileNameForRecording->setText(fileName);
-}
-
-
-
-
-//===================================
-void IpRecorderWgt::on_pbStartStopRecord_released()
-{
-    if (recordingOn) {
-        if (workFile.isOpen()) {
-            if (workFile.openMode() == QIODevice::WriteOnly) {
-                workFile.close();
-            }
+        if (!socket->open(QIODevice::ReadWrite)) {
+            qDebug() << "Ошибка открытия сокета";
         }
+
+        ui->lbConnectionStatus->setText("Установлено соединение");
     }
-    else {
-        if (!workFile.isOpen()) {
-            workFile.setFileName(fileName);
-            workFile.open(QIODevice::WriteOnly);
-        }
-    }
-    recordingOn = !recordingOn;
 }
 
 
 
 
-//===================================
-void IpRecorderWgt::on_pbPauseRecord_released()
-{
-    if (recordingPaused) {
-
-    }
-    else {
-
-    }
-    recordingPaused = !recordingPaused;
-}
-
-
-
-
-//===================================
-void IpRecorderWgt::on_tbFileNameForPlayer_released()
-{
-    fileName = QFileDialog::getOpenFileName(0, "Файл для воспроизведения", qApp->applicationDirPath(), "*.dat");
-}
-
-
-
-
-//===================================
-void IpRecorderWgt::on_pbStartStopPlayer_released()
-{
-    if (playingOn) {
-        playinGotoBegin();
-    }
-    else {
-        if (!playTimer) {
-            playTimer = new QTimer;
-            connect(playTimer,  &QTimer         ::timeout,
-                    this,       &IpRecorderWgt  ::playTimerTimeoutSlot);
-        }
-        playTimer->start(timeInterval);
-    }
-    playingOn = !playingOn;
-}
-
-
-
-
-//===================================
+//=================================== Слот установки соединения сокета
 void IpRecorderWgt::socketConnected()
 {
+    socket->open(QIODevice::ReadWrite);
     ui->pbConnectToServer->setText("Разъединиться");
-
+    ui->lbConnectionStatus->setText("Установлено соединение");
 }
 
 
 
 
-//===================================
+//=================================== Слот разрыва соединения сокета
 void IpRecorderWgt::socketDisconnected()
 {
     ui->pbConnectToServer->setText("Соединиться");
+    socket->deleteLater();
+    socket = NULL;
+    ui->lbConnectionStatus->setText("Соединения потеряно");
 }
 
 
 
 
-//===================================
+//=================================== Слот таймера соединения
 void IpRecorderWgt::connectionTimerTimeoutSlot()
 {
     if (socket->state() == QAbstractSocket::UnconnectedState) {
@@ -237,7 +173,7 @@ void IpRecorderWgt::connectionTimerTimeoutSlot()
 
 
 
-//===================================
+//=================================== Функция соединения с сервером
 void IpRecorderWgt::connectToHost()
 {
     bool success {true};
@@ -252,7 +188,7 @@ void IpRecorderWgt::connectToHost()
 
 
 
-//===================================
+//=================================== Функция закрытия сетевного соединения
 void IpRecorderWgt::closeConnectionTimer()
 {
     // Функция закрытия таймера соединения
@@ -266,7 +202,7 @@ void IpRecorderWgt::closeConnectionTimer()
 
 
 
-//===================================
+//=================================== Слот чтения из сокета
 void IpRecorderWgt::socketReadyRead()
 {
     // Функция чтения данных из сокета
@@ -286,29 +222,6 @@ void IpRecorderWgt::socketReadyRead()
     }
 }
 
-
-
-
-//===================================
-void IpRecorderWgt::playinGotoBegin()
-{
-
-}
-
-
-
-
-//===================================
-void IpRecorderWgt::playTimerTimeoutSlot()
-{
-    if (!workFile.isOpen()) return;
-    if (!socket) return;
-    if (socket->isOpen()) return;
-
-    qint64 packetSize = workFile.read((char*)&packetSize, sizeof(packetSize));
-    QByteArray ba = workFile.read(packetSize);
-    socket->write(ba);
-}
 
 
 

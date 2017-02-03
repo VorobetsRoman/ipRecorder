@@ -24,8 +24,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        iprecorderwgt.cpp
+        iprecorderwgt.cpp \
+    recorderform.cpp \
+    playerform.cpp
 
-HEADERS  += iprecorderwgt.h
+HEADERS  += iprecorderwgt.h \
+    recorderform.h \
+    playerform.h
 
-FORMS    += iprecorderwgt.ui
+FORMS    += iprecorderwgt.ui \
+    recorderform.ui \
+    playerform.ui
