@@ -30,9 +30,9 @@ PlayerForm::~PlayerForm()
 void PlayerForm::on_tbFileNameForPlayer_released()
 {
     // Слот выбора файла для воспроизведения
-//    QString fileName = QFileDialog::getOpenFileName(0, "Файл для чтения", qApp->applicationDirPath(), "*.dat");
-//    if (fileName == "") return;
-    QString fileName = "D:/Qt/build-ipRecorder-Desktop_Qt_5_8_0_MinGW_32bit-Debug/debug/test.dat";
+    QString fileName = QFileDialog::getOpenFileName(0, "Файл для чтения", qApp->applicationDirPath(), "*.dat");
+    if (fileName == "") return;
+//    QString fileName = "D:/Qt/build-ipRecorder-Desktop_Qt_5_8_0_MinGW_32bit-Debug/debug/test.dat";
 
     if (!workFile) {
         workFile = new QFile();
@@ -101,7 +101,6 @@ void PlayerForm::on_pbStartStopPlayer_released()
     }
     else {
         if (!workFile->isOpen()) {
-//            workFile->setFileName(fileName);
             if (!workFile->open(QIODevice::ReadOnly)) {
                 qDebug() << "file open is unsuccessfully";
                 return;

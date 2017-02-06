@@ -30,6 +30,8 @@ private:
     QFile       *workFile       {NULL};
     bool        recordingOn     {false};
     bool        pauseOn         {false};
+    qint64      tickCount       {0};
+    qint64      fileSize        {0};
 };
 
 #endif // RECORDERFORM_H

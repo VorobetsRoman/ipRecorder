@@ -64,9 +64,20 @@ void RecorderForm::on_tbFileNameForRecording_released()
 //=================================== Кнопка запуска записи
 void RecorderForm::on_pbStartStopRecord_released()
 {
+    // По нажатию на кнопку "старт" файл пишется с начала
     if (recordingOn) {
+        ui->cbTimeMarker->setEnabled(true);
+        if (workFile && workFile->isOpen()) {
+            workFile->close();
+        }
     }
     else {
+        ui->cbTimeMarker->setEnabled(false);
+        if (workFile && !workFile->isOpen()) {
+            workFile->open(QIODevice::WriteOnly);
+            tickCount = 0;
+            fileSize = 0;
+        }
     }
     recordingOn = !recordingOn;
 }
@@ -101,6 +112,11 @@ void RecorderForm::writeToFile()
     qint64 packetSize = ba.size();
     workFile->write((char*)&packetSize, sizeof(packetSize));
     workFile->write(ba);
+
+    tickCount++;
+    fileSize += packetSize;
+    ui->lbRecordedCount->setText(QString::number(tickCount));
+    ui->lbRecordedSize->setText(QString::number(fileSize / (1024 * 1024)));
 }
 
 
