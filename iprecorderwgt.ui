@@ -98,6 +98,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="pbStartServer">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Запустить</string>
           </property>
@@ -135,6 +138,9 @@
         </item>
         <item>
          <widget class="QLineEdit" name="leServerName">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="maximumSize">
            <size>
             <width>120</width>
@@ -151,6 +157,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="pbConnectToServer">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="maximumSize">
            <size>
             <width>80</width>
@@ -195,7 +204,7 @@
      <item>
       <widget class="QLabel" name="lbConnectionStatus">
        <property name="text">
-        <string>TextLabel</string>
+        <string/>
        </property>
       </widget>
      </item>

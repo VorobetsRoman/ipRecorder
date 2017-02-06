@@ -50,7 +50,10 @@ void IpRecorderWgt::on_pbStartServer_released()
         server->close();
         server->deleteLater();
         server = NULL;
+
         ui->pbStartServer->setText("Запустить");
+        ui->rbClientChoice->setEnabled(true);
+        ui->lePortName->setEnabled(true);
     }
     else if (ui->rbServerChoice->isChecked()) {
         server = new QTcpServer();
@@ -61,10 +64,15 @@ void IpRecorderWgt::on_pbStartServer_released()
         bool success {true};
         server->listen(QHostAddress::Any, ui->lePortName->text().toInt(&success, 10));
         if (!success) {
-            QMessageBox::warning(0, "Ошибка", "Ошибочно введен номер порта");
+            QMessageBox::warning(0, "Ошибка запуска сервера", server->errorString());
+            server->deleteLater();
+            server = NULL;
             return;
         }
+
         ui->pbStartServer->setText("Остановить");
+        ui->rbClientChoice->setEnabled(false);
+        ui->lePortName->setEnabled(false);
     }
 }
 
@@ -74,7 +82,8 @@ void IpRecorderWgt::on_pbStartServer_released()
 //=================================== Отметка
 void IpRecorderWgt::on_rbClientChoice_toggled(bool checked)
 {
-
+    ui->pbConnectToServer->setEnabled(checked);
+    ui->leServerName->setEnabled(checked);
 }
 
 
@@ -90,6 +99,13 @@ void IpRecorderWgt::on_pbConnectToServer_released()
         socket->deleteLater();
         socket = NULL;
         ui->pbConnectToServer->setText("Соединиться");
+        ui->rbServerChoice->setEnabled(true);
+        ui->lePortName->setEnabled(true);
+        if (connectionTimer) {
+            connectionTimer->stop();
+            connectionTimer->deleteLater();
+            connectionTimer = NULL;
+        }
     }
     else if (ui->rbClientChoice->isChecked()) {
         if (!socket) {
@@ -108,6 +124,9 @@ void IpRecorderWgt::on_pbConnectToServer_released()
                     this,               &IpRecorderWgt  ::connectionTimerTimeoutSlot);
             connectionTimer->start(200);
         }
+        ui->rbServerChoice->setEnabled(false);
+        ui->pbConnectToServer->setText("Отменить");
+        ui->lePortName->setEnabled(false);
     }
 }
 
@@ -126,12 +145,6 @@ void  IpRecorderWgt::newServerConnectionSlot()
                 recorderForm,   &RecorderForm   ::writeToFile       );
 
         socketConnected();
-
-//        if (!socket->open(QIODevice::ReadWrite)) {
-//            qDebug() << "Ошибка открытия сокета";
-//        }
-
-//        ui->lbConnectionStatus->setText("Установлено соединение");
     }
 }
 
@@ -142,11 +155,17 @@ void  IpRecorderWgt::newServerConnectionSlot()
 void IpRecorderWgt::socketConnected()
 {
     socket->open(QIODevice::ReadWrite);
+
     if (playerForm) {
         playerForm->setSocket(socket);
     }
-    ui->pbConnectToServer->setText("Разъединиться");
+
+    if (ui->pbConnectToServer->isChecked()) {
+        ui->pbConnectToServer->setText("Разъединиться");
+    }
+
     ui->lbConnectionStatus->setText("Установлено соединение");
+    ui->lbConnectionStatus->setStyleSheet("background-color: rgb(64, 152, 50);");
 }
 
 
@@ -162,6 +181,7 @@ void IpRecorderWgt::socketDisconnected()
         playerForm->setSocket(NULL);
     }
     ui->lbConnectionStatus->setText("Соединение потеряно");
+    ui->lbConnectionStatus->setStyleSheet("background-color: rgb(211, 36, 54);");
 }
 
 
@@ -209,6 +229,14 @@ void IpRecorderWgt::closeConnectionTimer()
 
 
 
+
+
+
+
+void IpRecorderWgt::on_rbServerChoice_toggled(bool checked)
+{
+    ui->pbStartServer->setEnabled(checked);
+}
 
 
 

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network designer
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,3 +35,8 @@ HEADERS  += iprecorderwgt.h \
 FORMS    += iprecorderwgt.ui \
     recorderform.ui \
     playerform.ui
+
+DISTFILES +=
+
+RESOURCES += \
+    buttons.qrc

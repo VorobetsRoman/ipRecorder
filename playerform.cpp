@@ -6,7 +6,6 @@
 
 
 
-
 //=================================== Конструктор
 PlayerForm::PlayerForm(QWidget *parent) :
     QWidget(parent),

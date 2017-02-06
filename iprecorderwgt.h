@@ -36,6 +36,8 @@ private slots:
 
     void closeConnectionTimer               ();
 
+    void on_rbServerChoice_toggled(bool checked);
+
 private:
     Ui::IpRecorderWgt   *ui             {NULL};
     QTcpServer          *server         {NULL};

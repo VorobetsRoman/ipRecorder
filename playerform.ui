@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>262</width>
-    <height>169</height>
+    <height>170</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,7 +94,12 @@
         </size>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="buttons.qrc">
+         <normaloff>:/Buttons/media-play-16.png</normaloff>
+         <normalon>:/Buttons/media-stop-32.png</normalon>:/Buttons/media-play-16.png</iconset>
        </property>
       </widget>
      </item>
@@ -107,7 +112,11 @@
         </size>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="buttons.qrc">
+         <normaloff>:/Buttons/media-pause-16.png</normaloff>:/Buttons/media-pause-16.png</iconset>
        </property>
       </widget>
      </item>
@@ -122,6 +131,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="buttons.qrc"/>
+ </resources>
  <connections/>
 </ui>
