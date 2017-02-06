@@ -1,10 +1,13 @@
 #include "playerform.h"
 #include "ui_playerform.h"
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDebug>
 
 
 
 
-//===================================
+//=================================== Конструктор
 PlayerForm::PlayerForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PlayerForm)
@@ -14,7 +17,8 @@ PlayerForm::PlayerForm(QWidget *parent) :
 
 
 
-//===================================
+
+//=================================== Деструктор
 PlayerForm::~PlayerForm()
 {
     delete ui;
@@ -23,7 +27,7 @@ PlayerForm::~PlayerForm()
 
 
 
-//===================================
+//=================================== Слот кнопки выбора имени файла
 void PlayerForm::on_tbFileNameForPlayer_released()
 {
     // Слот выбора файла для воспроизведения
@@ -51,54 +55,53 @@ void PlayerForm::on_tbFileNameForPlayer_released()
 
 
 
-//===================================
+//=================================== Слот использования скорости воспроизведения
 void PlayerForm::on_rbSetPlaySpeed_toggled(bool checked)
 {
     if (playTimer && playTimer->isActive()) {
-        playTimer->setInterval(defaultPlayInterval);
+        playTimer->setInterval(playDelay);
     }
 }
 
 
 
 
-//===================================
+//=================================== Слот использования сохраненной задержки перед воспроизведением
 void PlayerForm::on_rbTimeMarkerIsOn_toggled(bool checked)
 {
     if (playTimer && playTimer->isActive()) {
-        playTimer->setInterval(timeInterval);
+        playTimer->setInterval(playDelay);
     }
 }
 
 
 
 
-//===================================
+//=================================== Слот изменения скорости воспроизведения
 void PlayerForm::on_hsPlaySpeed_sliderMoved(int position)
 {
-    defaultPlayInterval = pow(1.5, position);
+    playDelay = pow(1.5, position);
     if (playTimer->isActive()) {
-        playTimer->setInterval(defaultPlayInterval);
+        playTimer->setInterval(playDelay);
     }
 }
 
 
 
 
-//===================================
+//=================================== Слот кнопки запуска воспроизведения
 void PlayerForm::on_pbStartStopPlayer_released()
 {
-    if (playingOn) {
-        playinGotoBegin();
-        workFile.close();
+    if (playingIsOn) {
+        workFile->close();
         if (playTimer) {
             playTimer->stop();
         }
     }
     else {
-        if (!workFile.isOpen()) {
-            workFile.setFileName(fileName);
-            if (!workFile.open(QIODevice::ReadOnly)) {
+        if (!workFile->isOpen()) {
+//            workFile->setFileName(fileName);
+            if (!workFile->open(QIODevice::ReadOnly)) {
                     qDebug() << "file open is unsuccessfully";
                     return;
             }
@@ -106,16 +109,20 @@ void PlayerForm::on_pbStartStopPlayer_released()
 
         if (!playTimer) {
             playTimer = new QTimer;
-            connect(playTimer,  &QTimer         ::timeout,
-                    this,       &IpRecorderWgt  ::playTimerTimeoutSlot);
+//            connect(playTimer,  &QTimer         ::timeout,
+//                    this,       &IpRecorderWgt  ::playTimerTimeoutSlot);
         }
         if (!ui->rbTimeMarkerIsOn->isChecked()) {
-            playTimer->start(timeInterval);
+            playTimer->start(playDelay);
         }
     }
-    playingOn = !playingOn;
+    playingIsOn = !playingIsOn;
 }
 
+
+
+
+//=================================== Слот кнопки паузы воспроизведения
 void PlayerForm::on_pbPauseRecord_2_released()
 {
 
@@ -125,15 +132,15 @@ void PlayerForm::on_pbPauseRecord_2_released()
 
 
 //=================================== Слот таймера воспроизведения
-void IpRecorderWgt::playTimerTimeoutSlot()
+void PlayerForm::playTimerTimeoutSlot()
 {
-    if (!workFile.isOpen()) return;
-    if (!socket) return;
-    if (!socket->isOpen()) return;
+    if (!workFile->isOpen()) return;
+//    if (!socket) return;
+//    if (!socket->isOpen()) return;
 
-    qint64 packetSize = workFile.read((char*)&packetSize, sizeof(packetSize));
-    QByteArray ba = workFile.read(packetSize);
-    socket->write(ba);
+//    qint64 packetSize = workFile.read((char*)&packetSize, sizeof(packetSize));
+//    QByteArray ba = workFile.read(packetSize);
+//    socket->write(ba);
 }
 
 

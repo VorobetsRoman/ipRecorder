@@ -25,6 +25,7 @@ private slots:
     void on_pbStartStopPlayer_released  ();
     void on_pbPauseRecord_2_released    ();
 
+    void playTimerTimeoutSlot           ();
 private:
     Ui::PlayerForm *ui;
 

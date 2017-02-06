@@ -7,7 +7,7 @@
 
 
 
-//===================================
+//=================================== Конструктор
 RecorderForm::RecorderForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RecorderForm)
@@ -33,7 +33,7 @@ RecorderForm::~RecorderForm()
 
 
 
-//===================================
+//=================================== Кнопка выбора файла для записи
 void RecorderForm::on_tbFileNameForRecording_released()
 {
     // Слот выбора файла для записи
@@ -61,7 +61,7 @@ void RecorderForm::on_tbFileNameForRecording_released()
 
 
 
-//===================================
+//=================================== Кнопка запуска записи
 void RecorderForm::on_pbStartStopRecord_released()
 {
     if (recordingOn) {
@@ -74,7 +74,7 @@ void RecorderForm::on_pbStartStopRecord_released()
 
 
 
-//===================================
+//=================================== Кнопка паузы записи
 void RecorderForm::on_pbPauseRecord_released()
 {
     if (pauseOn) {
@@ -89,14 +89,14 @@ void RecorderForm::on_pbPauseRecord_released()
 
 
 
-//===================================
+//=================================== Функция записи в файл
 void RecorderForm::writeToFile()
 {
     if (!workFile) return;
     if (!workFile->isOpen()) return;
     if (!recordingOn) return;
 
-    QTcpSocket* socket = QTcpSocket*(sender());
+    QTcpSocket* socket = (QTcpSocket*)sender() ;
     QByteArray ba = socket->readAll();
     qint64 packetSize = ba.size();
     workFile->write((char*)&packetSize, sizeof(packetSize));
