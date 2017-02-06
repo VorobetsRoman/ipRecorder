@@ -14,8 +14,8 @@ class RecorderForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit RecorderForm(QWidget *parent = 0);
-    ~RecorderForm();
+    explicit RecorderForm                   (QWidget *parent = 0);
+        ~RecorderForm                       ();
 
 public slots:
     void writeToFile                        ();
@@ -26,10 +26,10 @@ private slots:
     void on_pbPauseRecord_released          ();
 
 private:
-    Ui::RecorderForm *ui{NULL};
-    QFile *workFile     {NULL};
-    bool recordingOn    {false};
-    bool pauseOn        {false};
+    Ui::RecorderForm *ui        {NULL};
+    QFile       *workFile       {NULL};
+    bool        recordingOn     {false};
+    bool        pauseOn         {false};
 };
 
 #endif // RECORDERFORM_H

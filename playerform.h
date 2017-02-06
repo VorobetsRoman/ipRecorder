@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QFile>
+#include <QTcpSocket>
 
 namespace Ui {
 class PlayerForm;
@@ -14,8 +15,9 @@ class PlayerForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit PlayerForm(QWidget *parent = 0);
-    ~PlayerForm();
+    explicit PlayerForm                 (QWidget *parent = 0);
+        ~PlayerForm                     ();
+    void setSocket                      (QTcpSocket* newSocket);
 
 private slots:
     void on_tbFileNameForPlayer_released();
@@ -27,13 +29,14 @@ private slots:
 
     void playTimerTimeoutSlot           ();
 private:
-    Ui::PlayerForm *ui;
+    Ui::PlayerForm *ui      {NULL};
 
-    bool playingIsOn    {false};
-    bool pauseIsOn      {false};
-    QTimer  *playTimer  {NULL};
-    qint64 playDelay    {200};
-    QFile *workFile  {NULL};
+    bool        playingIsOn {false};
+    bool        pauseIsOn   {false};
+    QTimer      *playTimer  {NULL};
+    qint64      playDelay   {200};
+    QFile       *workFile   {NULL};
+    QTcpSocket  *socket     {NULL};
 };
 
 #endif // PLAYERFORM_H

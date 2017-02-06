@@ -31,8 +31,9 @@ PlayerForm::~PlayerForm()
 void PlayerForm::on_tbFileNameForPlayer_released()
 {
     // Слот выбора файла для воспроизведения
-    QString fileName = QFileDialog::getSaveFileName(0, "Файл для записи", qApp->applicationDirPath(), "*.dat");
-    if (fileName == "") return;
+//    QString fileName = QFileDialog::getOpenFileName(0, "Файл для чтения", qApp->applicationDirPath(), "*.dat");
+//    if (fileName == "") return;
+    QString fileName = "D:/Qt/build-ipRecorder-Desktop_Qt_5_8_0_MinGW_32bit-Debug/debug/test.dat";
 
     if (!workFile) {
         workFile = new QFile();
@@ -43,6 +44,7 @@ void PlayerForm::on_tbFileNameForPlayer_released()
         }
     }
 
+    QFile test(fileName);
     workFile->setFileName(fileName);
     if (!workFile->open(QIODevice::ReadOnly)) {
         QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
@@ -102,15 +104,15 @@ void PlayerForm::on_pbStartStopPlayer_released()
         if (!workFile->isOpen()) {
 //            workFile->setFileName(fileName);
             if (!workFile->open(QIODevice::ReadOnly)) {
-                    qDebug() << "file open is unsuccessfully";
-                    return;
+                qDebug() << "file open is unsuccessfully";
+                return;
             }
         }
 
         if (!playTimer) {
             playTimer = new QTimer;
-//            connect(playTimer,  &QTimer         ::timeout,
-//                    this,       &IpRecorderWgt  ::playTimerTimeoutSlot);
+            connect(playTimer,  &QTimer         ::timeout,
+                    this,       &PlayerForm     ::playTimerTimeoutSlot);
         }
         if (!ui->rbTimeMarkerIsOn->isChecked()) {
             playTimer->start(playDelay);
@@ -135,13 +137,31 @@ void PlayerForm::on_pbPauseRecord_2_released()
 void PlayerForm::playTimerTimeoutSlot()
 {
     if (!workFile->isOpen()) return;
-//    if (!socket) return;
-//    if (!socket->isOpen()) return;
+    if (!socket) return;
+    if (!socket->isOpen()) return;
+    if (workFile->atEnd()) {
+        workFile->seek(0);
+        playTimer->stop();
+        qDebug() << "done";
+        return;
+    }
 
-//    qint64 packetSize = workFile.read((char*)&packetSize, sizeof(packetSize));
-//    QByteArray ba = workFile.read(packetSize);
-//    socket->write(ba);
+    qint64 packetSize {0};
+    workFile->read((char*)&packetSize, sizeof(packetSize));
+    QByteArray ba = workFile->read(packetSize);
+    qDebug() << ba;
+    socket->write(ba);
 }
+
+
+
+
+//=================================== Инициализация сокета, в который будет происходить запись
+void PlayerForm::setSocket(QTcpSocket *newSocket)
+{
+    socket = newSocket;
+}
+
 
 
 

@@ -20,8 +20,8 @@ class IpRecorderWgt : public QWidget
     Q_OBJECT
 
 public:
-    explicit IpRecorderWgt(QWidget *parent = 0);
-    ~IpRecorderWgt();
+    explicit IpRecorderWgt                  (QWidget *parent = 0);
+        ~IpRecorderWgt                      ();
 
 private slots:
     void on_pbStartServer_released          ();
@@ -31,16 +31,15 @@ private slots:
     void newServerConnectionSlot            ();
     void socketConnected                    ();
     void socketDisconnected                 ();
-    void socketReadyRead                    ();
 
     void connectionTimerTimeoutSlot         ();
 
     void closeConnectionTimer               ();
 
 private:
-    Ui::IpRecorderWgt   *ui     {NULL};
-    QTcpServer          *server {NULL};
-    QTcpSocket          *socket {NULL};
+    Ui::IpRecorderWgt   *ui             {NULL};
+    QTcpServer          *server         {NULL};
+    QTcpSocket          *socket         {NULL};
     QTimer              *connectionTimer{NULL};
     PlayerForm          *playerForm     {NULL};
     RecorderForm        *recorderForm   {NULL};

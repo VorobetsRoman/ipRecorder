@@ -9,7 +9,7 @@
 
 
 
-//===================================
+//=================================== Конструктор
 IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::IpRecorderWgt)
@@ -94,12 +94,12 @@ void IpRecorderWgt::on_pbConnectToServer_released()
     else if (ui->rbClientChoice->isChecked()) {
         if (!socket) {
             socket = new QTcpSocket();
-            connect(socket, &QTcpSocket     ::connected,
-                    this,   &IpRecorderWgt  ::socketConnected   );
-            connect(socket, &QTcpSocket     ::disconnected,
-                    this,   &IpRecorderWgt  ::socketDisconnected);
-            connect(socket, &QTcpSocket     ::readyRead,
-                    this,   &IpRecorderWgt  ::socketReadyRead   );
+            connect(socket,         &QTcpSocket     ::connected,
+                    this,           &IpRecorderWgt  ::socketConnected   );
+            connect(socket,         &QTcpSocket     ::disconnected,
+                    this,           &IpRecorderWgt  ::socketDisconnected);
+            connect(socket,         &QTcpSocket     ::readyRead,
+                    recorderForm,   &RecorderForm   ::writeToFile       );
         }
         connectToHost();
         if (!connectionTimer) {
@@ -120,16 +120,18 @@ void  IpRecorderWgt::newServerConnectionSlot()
     if (!socket) {
         socket = server->nextPendingConnection();
 
-        connect(socket, &QTcpSocket     ::disconnected,
-                this,   &IpRecorderWgt  ::socketDisconnected);
-        connect(socket, &QTcpSocket     ::readyRead,
-                this,   &IpRecorderWgt  ::socketReadyRead   );
+        connect(socket,         &QTcpSocket     ::disconnected,
+                this,           &IpRecorderWgt  ::socketDisconnected);
+        connect(socket,         &QTcpSocket     ::readyRead,
+                recorderForm,   &RecorderForm   ::writeToFile       );
 
-        if (!socket->open(QIODevice::ReadWrite)) {
-            qDebug() << "Ошибка открытия сокета";
-        }
+        socketConnected();
 
-        ui->lbConnectionStatus->setText("Установлено соединение");
+//        if (!socket->open(QIODevice::ReadWrite)) {
+//            qDebug() << "Ошибка открытия сокета";
+//        }
+
+//        ui->lbConnectionStatus->setText("Установлено соединение");
     }
 }
 
@@ -140,6 +142,9 @@ void  IpRecorderWgt::newServerConnectionSlot()
 void IpRecorderWgt::socketConnected()
 {
     socket->open(QIODevice::ReadWrite);
+    if (playerForm) {
+        playerForm->setSocket(socket);
+    }
     ui->pbConnectToServer->setText("Разъединиться");
     ui->lbConnectionStatus->setText("Установлено соединение");
 }
@@ -153,7 +158,10 @@ void IpRecorderWgt::socketDisconnected()
     ui->pbConnectToServer->setText("Соединиться");
     socket->deleteLater();
     socket = NULL;
-    ui->lbConnectionStatus->setText("Соединения потеряно");
+    if (playerForm) {
+        playerForm->setSocket(NULL);
+    }
+    ui->lbConnectionStatus->setText("Соединение потеряно");
 }
 
 
@@ -200,27 +208,6 @@ void IpRecorderWgt::closeConnectionTimer()
 }
 
 
-
-
-//=================================== Слот чтения из сокета
-void IpRecorderWgt::socketReadyRead()
-{
-    // Функция чтения данных из сокета
-    // и записи данных в файл
-//    if (fileName == "") return;
-//    if (!recordingOn)   return;
-//    if (recordingPaused) return;
-
-//    QByteArray ba = socket->readAll();
-//    qint64 packetSize = ba.size();
-//    workFile.write((char*)&packetSize, sizeof(packetSize));
-//    qint64 saved = workFile.write(ba);
-//    if (saved < ba.size()) {
-//        QMessageBox::warning(0, "Ошибка", "В файл записалось меньше прочитанного, запись приостановлена");
-//        recordingPaused = true;
-        // добавить функцию остановки записи
-//    }
-}
 
 
 
