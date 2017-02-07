@@ -10,7 +10,6 @@
 #include "recorderform.h"
 
 
-
 namespace Ui {
 class IpRecorderWgt;
 }

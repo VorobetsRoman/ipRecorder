@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QApplication>
 #include <QMessageBox>
+#include "fileheader.h"
 
 
 
@@ -56,6 +57,8 @@ void RecorderForm::on_tbFileNameForRecording_released()
     }
 
     ui->lbFileNameForRecording->setText(fileName);
+
+    writeHeader();
 }
 
 
@@ -77,6 +80,7 @@ void RecorderForm::on_pbStartStopRecord_released()
             workFile->open(QIODevice::WriteOnly);
             tickCount = 0;
             fileSize = 0;
+            lastTime = QTime::currentTime();
         }
     }
     recordingOn = !recordingOn;
@@ -107,6 +111,12 @@ void RecorderForm::writeToFile()
     if (!workFile->isOpen()) return;
     if (!recordingOn) return;
 
+    if (ui->cbTimeMarker->isChecked()) {
+        qint32 timeDelay = lastTime.msecsTo(QTime::currentTime());
+        lastTime = QTime::currentTime();
+        workFile->write((char*)&timeDelay, sizeof(timeDelay));
+    }
+
     QTcpSocket* socket = (QTcpSocket*)sender() ;
     QByteArray ba = socket->readAll();
     qint64 packetSize = ba.size();
@@ -117,6 +127,34 @@ void RecorderForm::writeToFile()
     fileSize += packetSize;
     ui->lbRecordedCount->setText(QString::number(tickCount));
     ui->lbRecordedSize->setText(QString::number(fileSize / (1024 * 1024)));
+}
+
+
+
+
+//=================================== Слот отметки включения маркера
+void RecorderForm::on_cbTimeMarker_toggled(bool)
+{
+    if (workFile && workFile->isOpen()) {
+        writeHeader();
+    }
+}
+
+
+
+
+//===================================
+void RecorderForm::writeHeader()
+{
+    // Перейти в начало файла, записать размер заголовка,
+    // Записать сам заголовок
+    workFile->seek(0);
+    qint64 headerSize = sizeof(FileHeader);
+    workFile->write((char*)&headerSize, sizeof(headerSize));
+
+    FileHeader fileHeader;
+    fileHeader.timeMarkerExist = ui->cbTimeMarker->isChecked() ? 1 : 0;
+    workFile->write((char*)&fileHeader, headerSize);
 }
 
 

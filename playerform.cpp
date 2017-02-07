@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include "fileheader.h"
 
 
 
@@ -20,6 +21,18 @@ PlayerForm::PlayerForm(QWidget *parent) :
 //=================================== Деструктор
 PlayerForm::~PlayerForm()
 {
+    if (playTimer) {
+        if (playTimer->isActive()) playTimer->stop();
+        playTimer->deleteLater();
+    }
+    if (workFile) {
+        if (workFile->isOpen()) workFile->close();
+        workFile->deleteLater();
+    }
+    if (socket) {
+        if (socket->isOpen()) socket->close();
+        socket->deleteLater();
+    }
     delete ui;
 }
 
@@ -51,6 +64,31 @@ void PlayerForm::on_tbFileNameForPlayer_released()
     }
 
     ui->lbFileNameForPlayer->setText(fileName);
+
+    // Вычитать заголовок из файла, определить наличие временного маркера
+    qint64 fileHeaderSize {0};
+    workFile->read((char*)&fileHeaderSize, sizeof(fileHeaderSize));
+    FileHeader fileHeader;
+    workFile->read((char*)&fileHeader, fileHeaderSize);
+    switch (fileHeader.timeMarkerExist) {
+    case 0:
+        timeMarkerExist = false;
+        ui->rbSetPlaySpeed->toggle();
+        ui->rbTimeMarkerIsOn->setDisabled(true);
+        break;
+    case 1:
+        timeMarkerExist = true;
+        ui->rbTimeMarkerIsOn->setEnabled(true);
+        break;
+    default:
+        break;
+    }
+
+    // Если есть временной маркер, выкинуть его первое значение
+    if (timeMarkerExist) {
+        qint32 timeDelay;
+        workFile->read((char*)&timeDelay, sizeof(timeDelay));
+    }
 }
 
 
@@ -60,7 +98,7 @@ void PlayerForm::on_tbFileNameForPlayer_released()
 void PlayerForm::on_rbSetPlaySpeed_toggled(bool checked)
 {
     if (playTimer && playTimer->isActive()) {
-        playTimer->setInterval(playDelay);
+//        playTimer->setInterval(playDelay);
     }
 }
 
@@ -81,8 +119,8 @@ void PlayerForm::on_rbTimeMarkerIsOn_toggled(bool checked)
 //=================================== Слот изменения скорости воспроизведения
 void PlayerForm::on_hsPlaySpeed_sliderMoved(int position)
 {
-    playDelay = pow(1.5, position);
-    if (playTimer->isActive()) {
+    playDelay = pow(3, position);
+    if (playTimer && playTimer->isActive()) {
         playTimer->setInterval(playDelay);
     }
 }
@@ -93,6 +131,8 @@ void PlayerForm::on_hsPlaySpeed_sliderMoved(int position)
 //=================================== Слот кнопки запуска воспроизведения
 void PlayerForm::on_pbStartStopPlayer_released()
 {
+    if (!(workFile && workFile->isOpen()
+          && socket && socket->isOpen())) return;
     if (playingIsOn) {
         workFile->close();
         if (playTimer) {
@@ -112,9 +152,7 @@ void PlayerForm::on_pbStartStopPlayer_released()
             connect(playTimer,  &QTimer         ::timeout,
                     this,       &PlayerForm     ::playTimerTimeoutSlot);
         }
-        if (!ui->rbTimeMarkerIsOn->isChecked()) {
-            playTimer->start(playDelay);
-        }
+        playTimer->start(playDelay);
     }
     playingIsOn = !playingIsOn;
 }
@@ -123,7 +161,7 @@ void PlayerForm::on_pbStartStopPlayer_released()
 
 
 //=================================== Слот кнопки паузы воспроизведения
-void PlayerForm::on_pbPauseRecord_2_released()
+void PlayerForm::on_pbPausePlay_released()
 {
 
 }
@@ -138,17 +176,32 @@ void PlayerForm::playTimerTimeoutSlot()
     if (!socket) return;
     if (!socket->isOpen()) return;
     if (workFile->atEnd()) {
-        workFile->seek(0);
-        playTimer->stop();
-        qDebug() << "done";
+        workFileAtEnd();
         return;
     }
 
     qint64 packetSize {0};
     workFile->read((char*)&packetSize, sizeof(packetSize));
     QByteArray ba = workFile->read(packetSize);
-    qDebug() << ba;
+//    qDebug() << ba;
     socket->write(ba);
+
+    int filePos = 100 * workFile->pos() / workFile->size();
+    ui->progressPlayer->setValue(100 * workFile->pos() / workFile->size());
+
+    if (workFile->atEnd()) {
+        workFileAtEnd();
+        return;
+    }
+
+    if (timeMarkerExist) {
+        qint32 timeDelay {0};
+        workFile->read((char*)&timeDelay, sizeof(timeDelay));
+//        qDebug() << timeDelay;
+        if (ui->rbTimeMarkerIsOn->isChecked()) {
+            playTimer->setInterval(timeDelay);
+        }
+    }
 }
 
 
@@ -159,6 +212,17 @@ void PlayerForm::setSocket(QTcpSocket *newSocket)
 {
     socket = newSocket;
 }
+
+
+
+
+void PlayerForm::workFileAtEnd()
+{
+    workFile->seek(0);
+    playTimer->stop();
+    playingIsOn = false;
+}
+
 
 
 

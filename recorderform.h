@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QFile>
 #include <QTcpSocket>
+#include <QTime>
 
 namespace Ui {
 class RecorderForm;
@@ -25,6 +26,8 @@ private slots:
     void on_pbStartStopRecord_released      ();
     void on_pbPauseRecord_released          ();
 
+    void on_cbTimeMarker_toggled            (bool checked);
+
 private:
     Ui::RecorderForm *ui        {NULL};
     QFile       *workFile       {NULL};
@@ -32,6 +35,9 @@ private:
     bool        pauseOn         {false};
     qint64      tickCount       {0};
     qint64      fileSize        {0};
+    QTime       lastTime;
+
+    void writeHeader                        ();
 };
 
 #endif // RECORDERFORM_H

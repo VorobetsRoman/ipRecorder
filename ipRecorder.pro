@@ -30,7 +30,8 @@ SOURCES += main.cpp\
 
 HEADERS  += iprecorderwgt.h \
     recorderform.h \
-    playerform.h
+    playerform.h \
+    fileheader.h
 
 FORMS    += iprecorderwgt.ui \
     recorderform.ui \

@@ -25,18 +25,22 @@ private slots:
     void on_rbTimeMarkerIsOn_toggled    (bool checked);
     void on_hsPlaySpeed_sliderMoved     (int position);
     void on_pbStartStopPlayer_released  ();
-    void on_pbPauseRecord_2_released    ();
+    void on_pbPausePlay_released        ();
 
     void playTimerTimeoutSlot           ();
+
 private:
     Ui::PlayerForm *ui      {NULL};
 
     bool        playingIsOn {false};
     bool        pauseIsOn   {false};
     QTimer      *playTimer  {NULL};
-    qint64      playDelay   {200};
+    qint64      playDelay   {2000};
     QFile       *workFile   {NULL};
     QTcpSocket  *socket     {NULL};
+    bool        timeMarkerExist {false};
+
+    void workFileAtEnd  ();
 };
 
 #endif // PLAYERFORM_H

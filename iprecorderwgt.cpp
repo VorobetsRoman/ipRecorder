@@ -230,9 +230,7 @@ void IpRecorderWgt::closeConnectionTimer()
 
 
 
-
-
-
+//===================================
 void IpRecorderWgt::on_rbServerChoice_toggled(bool checked)
 {
     ui->pbStartServer->setEnabled(checked);
