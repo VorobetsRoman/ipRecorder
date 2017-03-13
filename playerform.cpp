@@ -45,7 +45,6 @@ void PlayerForm::on_tbFileNameForPlayer_released()
     // Слот выбора файла для воспроизведения
     QString fileName = QFileDialog::getOpenFileName(0, "Файл для чтения", qApp->applicationDirPath(), "*.dat");
     if (fileName == "") return;
-//    QString fileName = "D:/Qt/build-ipRecorder-Desktop_Qt_5_8_0_MinGW_32bit-Debug/debug/test.dat";
 
     if (!workFile) {
         workFile = new QFile();
@@ -95,7 +94,7 @@ void PlayerForm::on_tbFileNameForPlayer_released()
 
 
 //=================================== Слот использования скорости воспроизведения
-void PlayerForm::on_rbSetPlaySpeed_toggled(bool checked)
+void PlayerForm::on_rbSetPlaySpeed_toggled(bool)
 {
     if (playTimer && playTimer->isActive()) {
 //        playTimer->setInterval(playDelay);
@@ -106,7 +105,7 @@ void PlayerForm::on_rbSetPlaySpeed_toggled(bool checked)
 
 
 //=================================== Слот использования сохраненной задержки перед воспроизведением
-void PlayerForm::on_rbTimeMarkerIsOn_toggled(bool checked)
+void PlayerForm::on_rbTimeMarkerIsOn_toggled(bool)
 {
     if (playTimer && playTimer->isActive()) {
         playTimer->setInterval(playDelay);
@@ -133,13 +132,18 @@ void PlayerForm::on_pbStartStopPlayer_released()
 {
     if (!(workFile && workFile->isOpen()
           && socket && socket->isOpen())) return;
-    if (playingIsOn) {
+
+    if (playingIsOn)
+    {
+        ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-play-16.png"));
         workFile->close();
         if (playTimer) {
             playTimer->stop();
         }
     }
-    else {
+    else
+    {
+        ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
         if (!workFile->isOpen()) {
             if (!workFile->open(QIODevice::ReadOnly)) {
                 qDebug() << "file open is unsuccessfully";
@@ -186,7 +190,7 @@ void PlayerForm::playTimerTimeoutSlot()
 //    qDebug() << ba;
     socket->write(ba);
 
-    int filePos = 100 * workFile->pos() / workFile->size();
+//    int filePos = 100 * workFile->pos() / workFile->size();
     ui->progressPlayer->setValue(100 * workFile->pos() / workFile->size());
 
     if (workFile->atEnd()) {

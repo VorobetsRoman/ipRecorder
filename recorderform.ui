@@ -69,8 +69,8 @@
         </property>
         <property name="icon">
          <iconset resource="buttons.qrc">
-          <normaloff>:/Buttons/media-play-16.png</normaloff>
-          <normalon>:/Buttons/media-stop-32.png</normalon>:/Buttons/media-play-16.png</iconset>
+          <normaloff>:/Buttons/media-record-16.png</normaloff>
+          <normalon>:/Buttons/media-stop-32.png</normalon>:/Buttons/media-record-16.png</iconset>
         </property>
        </widget>
       </item>
@@ -88,6 +88,9 @@
         <property name="icon">
          <iconset resource="buttons.qrc">
           <normaloff>:/Buttons/media-pause-16.png</normaloff>:/Buttons/media-pause-16.png</iconset>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
         </property>
        </widget>
       </item>

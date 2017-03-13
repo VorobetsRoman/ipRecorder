@@ -69,12 +69,14 @@ void RecorderForm::on_pbStartStopRecord_released()
 {
     // По нажатию на кнопку "старт" файл пишется с начала
     if (recordingOn) {
+        ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-record-16.png"));
         ui->cbTimeMarker->setEnabled(true);
         if (workFile && workFile->isOpen()) {
             workFile->close();
         }
     }
     else {
+        ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-stop-32.png"));
         ui->cbTimeMarker->setEnabled(false);
         if (workFile && !workFile->isOpen()) {
             workFile->open(QIODevice::WriteOnly);
@@ -93,10 +95,10 @@ void RecorderForm::on_pbStartStopRecord_released()
 void RecorderForm::on_pbPauseRecord_released()
 {
     if (pauseOn) {
-
+//        ui->pbPauseRecord->setIcon(QIcon(":\Buttons\media-pause-16.png"));
     }
     else {
-
+//        ui->pbPauseRecord->setIcon(QIcon(":\Buttons\media-record-16.png"));
     }
     pauseOn = !pauseOn;
 }
