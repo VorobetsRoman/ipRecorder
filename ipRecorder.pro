@@ -26,16 +26,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         iprecorderwgt.cpp \
     recorderform.cpp \
-    playerform.cpp
+    playerform.cpp \
+    splitform.cpp
 
 HEADERS  += iprecorderwgt.h \
     recorderform.h \
     playerform.h \
-    fileheader.h
+    fileheader.h \
+    splitform.h
 
 FORMS    += iprecorderwgt.ui \
     recorderform.ui \
-    playerform.ui
+    playerform.ui \
+    splitform.ui
 
 DISTFILES +=
 

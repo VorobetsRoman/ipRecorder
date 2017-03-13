@@ -20,8 +20,8 @@ IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
 
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-    ui->tabPlayRecord->setTabText(0, "Запись");
-    ui->tabPlayRecord->setTabText(1, "Воспроизведение");
+//    ui->tabPlayRecord->setTabText(0, "Запись");
+//    ui->tabPlayRecord->setTabText(1, "Воспроизведение");
 }
 
 

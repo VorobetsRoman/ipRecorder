@@ -15,64 +15,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Порт:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lePortName">
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="inputMask">
-        <string>0000</string>
-       </property>
-       <property name="text">
-        <string>5000</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item>
     <widget class="QFrame" name="frame">
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(217, 217, 217);</string>
+      <string notr="true">background-color: rgb(230, 230, 230);</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -81,6 +26,61 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="minimumSize">
+           <size>
+            <width>60</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>60</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Порт:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lePortName">
+          <property name="maximumSize">
+           <size>
+            <width>60</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="inputMask">
+           <string>0000</string>
+          </property>
+          <property name="text">
+           <string>5000</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -211,13 +211,16 @@
     </layout>
    </item>
    <item>
-    <widget class="QTabWidget" name="tabPlayRecord">
+    <widget class="QTabWidget" name="splitWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <property name="documentMode">
+      <bool>false</bool>
+     </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Tab 1</string>
+       <string>Запись</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
@@ -227,11 +230,21 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Tab 2</string>
+       <string>Воспроизведение</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="PlayerForm" name="playerWgt" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Сращивание</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="SplitForm" name="widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -251,6 +264,12 @@
    <class>PlayerForm</class>
    <extends>QWidget</extends>
    <header location="global">playerform.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SplitForm</class>
+   <extends>QWidget</extends>
+   <header location="global">splitform.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
