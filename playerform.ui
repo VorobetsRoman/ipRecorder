@@ -26,7 +26,7 @@
      <item>
       <widget class="QLabel" name="lbFileNameForPlayer">
        <property name="text">
-        <string>Имя файла</string>
+        <string>Имя файла.</string>
        </property>
       </widget>
      </item>

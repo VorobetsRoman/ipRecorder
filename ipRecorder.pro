@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network designer
+QT       += core gui network
+
+QMAKE_CXXFLAGS += -std=c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

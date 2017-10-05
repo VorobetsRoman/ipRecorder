@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include "fileheader.h"
+#include <math.h>
 
 
 
@@ -48,8 +49,7 @@ void PlayerForm::on_tbFileNameForPlayer_released()
 
     if (!workFile) {
         workFile = new QFile();
-    }
-    else {
+    } else {
         if (workFile->isOpen()) {
             workFile->close();
         }
@@ -140,9 +140,7 @@ void PlayerForm::on_pbStartStopPlayer_released()
         if (playTimer) {
             playTimer->stop();
         }
-    }
-    else
-    {
+    } else {
         ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
         if (!workFile->isOpen()) {
             if (!workFile->open(QIODevice::ReadOnly)) {
@@ -187,7 +185,6 @@ void PlayerForm::playTimerTimeoutSlot()
     qint64 packetSize {0};
     workFile->read((char*)&packetSize, sizeof(packetSize));
     QByteArray ba = workFile->read(packetSize);
-//    qDebug() << ba;
     socket->write(ba);
 
 //    int filePos = 100 * workFile->pos() / workFile->size();
@@ -201,7 +198,6 @@ void PlayerForm::playTimerTimeoutSlot()
     if (timeMarkerExist) {
         qint32 timeDelay {0};
         workFile->read((char*)&timeDelay, sizeof(timeDelay));
-//        qDebug() << timeDelay;
         if (ui->rbTimeMarkerIsOn->isChecked()) {
             playTimer->setInterval(timeDelay);
         }
@@ -226,7 +222,6 @@ void PlayerForm::workFileAtEnd()
     playTimer->stop();
     playingIsOn = false;
 }
-
 
 
 

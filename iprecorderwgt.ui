@@ -7,15 +7,21 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>345</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IpRecorderWgt</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QFrame" name="frame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>84</height>
+      </size>
+     </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(230, 230, 230);</string>
      </property>
@@ -27,12 +33,25 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item>
          <widget class="QLabel" name="label">
           <property name="minimumSize">
            <size>
-            <width>60</width>
+            <width>40</width>
             <height>0</height>
            </size>
           </property>
@@ -52,6 +71,12 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lePortName">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>60</width>
@@ -59,15 +84,18 @@
            </size>
           </property>
           <property name="inputMask">
-           <string>0000</string>
+           <string>00000</string>
           </property>
           <property name="text">
            <string>5000</string>
           </property>
+          <property name="maxLength">
+           <number>5</number>
+          </property>
          </widget>
         </item>
         <item>
-         <spacer name="horizontalSpacer">
+         <spacer name="horizontalSpacer_4">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -79,67 +107,23 @@
           </property>
          </spacer>
         </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QRadioButton" name="rbServerChoice">
-          <property name="maximumSize">
-           <size>
-            <width>60</width>
-            <height>16777215</height>
-           </size>
-          </property>
+         <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Сервер</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pbStartServer">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Запустить</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QRadioButton" name="rbClientChoice">
-          <property name="maximumSize">
-           <size>
-            <width>80</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Клиент</string>
+           <string>Адрес:</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="leServerName">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>91</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="maximumSize">
            <size>
@@ -156,9 +140,73 @@
          </widget>
         </item>
         <item>
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbStartServer">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Сервер</string>
+          </property>
+          <property name="icon">
+           <iconset resource="buttons.qrc">
+            <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="pbConnectToServer">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="maximumSize">
            <size>
@@ -167,7 +215,11 @@
            </size>
           </property>
           <property name="text">
-           <string>Соединиться</string>
+           <string>Клиент</string>
+          </property>
+          <property name="icon">
+           <iconset resource="buttons.qrc">
+            <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
           </property>
          </widget>
         </item>
@@ -213,14 +265,18 @@
    <item>
     <widget class="QTabWidget" name="splitWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
      </property>
      <widget class="QWidget" name="tab">
+      <attribute name="icon">
+       <iconset resource="buttons.qrc">
+        <normaloff>:/Buttons/media-record-16.png</normaloff>:/Buttons/media-record-16.png</iconset>
+      </attribute>
       <attribute name="title">
-       <string>Запись</string>
+       <string/>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
@@ -229,8 +285,12 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
+      <attribute name="icon">
+       <iconset resource="buttons.qrc">
+        <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
+      </attribute>
       <attribute name="title">
-       <string>Воспроизведение</string>
+       <string/>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -273,6 +333,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="buttons.qrc"/>
+ </resources>
  <connections/>
 </ui>

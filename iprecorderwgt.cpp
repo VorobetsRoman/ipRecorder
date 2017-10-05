@@ -1,10 +1,11 @@
 #include "iprecorderwgt.h"
 #include "ui_iprecorderwgt.h"
-#include <QTextCodec>
+//#include <QTextCodec>
 #include <QDebug>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QFile>
+#include <QSettings>
 
 
 
@@ -18,10 +19,28 @@ IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
     recorderForm = ui->recorderWgt;
     playerForm = ui->playerWgt;
 
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+//    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+    initSettings();
+}
 
-//    ui->tabPlayRecord->setTabText(0, "Запись");
-//    ui->tabPlayRecord->setTabText(1, "Воспроизведение");
+
+
+
+//===================================
+void IpRecorderWgt::initSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "ipRecorder");
+
+    if (!settings.contains("port")) {
+        settings.setValue("port", "5000");
+    } else {
+        ui->lePortName->setText(settings.value("port").toString());
+    }
+    if (!settings.contains("address")) {
+        settings.setValue("address", "127.0.0.1");
+    } else {
+        ui->leServerName->setText(settings.value("address").toString());
+    }
 }
 
 
@@ -31,8 +50,16 @@ IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
 IpRecorderWgt::~IpRecorderWgt()
 {
     if (server) server->deleteLater();
-    if (socket) socket->deleteLater();
+    if (socket) {
+        if (socket->isOpen()) {
+            socket->close();
+        }
+        socket->deleteLater();
+    }
     closeConnectionTimer();
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "ipRecorder");
+    settings.setValue("port", ui->lePortName->text());
+    settings.setValue("address", ui->leServerName->text());
     delete ui;
 }
 
@@ -50,12 +77,16 @@ void IpRecorderWgt::on_pbStartServer_released()
         server->close();
         server->deleteLater();
         server = NULL;
+        if (socket) {
+            socket->disconnect();
+            socket->deleteLater();
+            socket = NULL;
+        }
 
-        ui->pbStartServer->setText("Запустить");
-        ui->rbClientChoice->setEnabled(true);
+        ui->pbStartServer->setIcon(QIcon(":/Buttons/media-play-16.png"));
+        ui->pbConnectToServer->setEnabled(true);
         ui->lePortName->setEnabled(true);
-    }
-    else if (ui->rbServerChoice->isChecked()) {
+    } else {
         server = new QTcpServer();
 
         connect(server, &QTcpServer     ::newConnection,
@@ -70,20 +101,10 @@ void IpRecorderWgt::on_pbStartServer_released()
             return;
         }
 
-        ui->pbStartServer->setText("Остановить");
-        ui->rbClientChoice->setEnabled(false);
+        ui->pbStartServer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
+        ui->pbConnectToServer->setEnabled(false);
         ui->lePortName->setEnabled(false);
     }
-}
-
-
-
-
-//=================================== Отметка
-void IpRecorderWgt::on_rbClientChoice_toggled(bool checked)
-{
-    ui->pbConnectToServer->setEnabled(checked);
-    ui->leServerName->setEnabled(checked);
 }
 
 
@@ -98,34 +119,32 @@ void IpRecorderWgt::on_pbConnectToServer_released()
         socket->disconnect();
         socket->deleteLater();
         socket = NULL;
-        ui->pbConnectToServer->setText("Соединиться");
-        ui->rbServerChoice->setEnabled(true);
+        ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-play-16.png"));
+        ui->pbStartServer->setEnabled(true);
         ui->lePortName->setEnabled(true);
         if (connectionTimer) {
             connectionTimer->stop();
             connectionTimer->deleteLater();
             connectionTimer = NULL;
         }
-    }
-    else if (ui->rbClientChoice->isChecked()) {
-        if (!socket) {
-            socket = new QTcpSocket();
-            connect(socket,         &QTcpSocket     ::connected,
-                    this,           &IpRecorderWgt  ::socketConnected   );
-            connect(socket,         &QTcpSocket     ::disconnected,
-                    this,           &IpRecorderWgt  ::socketDisconnected);
-            connect(socket,         &QTcpSocket     ::readyRead,
-                    recorderForm,   &RecorderForm   ::writeToFile       );
-        }
+    } else {
+        socket = new QTcpSocket();
+        connect(socket,         &QTcpSocket     ::connected,
+                this,           &IpRecorderWgt  ::slSocketConnected   );
+        connect(socket,         &QTcpSocket     ::disconnected,
+                this,           &IpRecorderWgt  ::slSocketDisconnected);
+        connect(socket,         &QTcpSocket     ::readyRead,
+                recorderForm,   &RecorderForm   ::slWriteToFile       );
         connectToHost();
         if (!connectionTimer) {
             connectionTimer = new QTimer();
             connect(connectionTimer,    &QTimer         ::timeout,
-                    this,               &IpRecorderWgt  ::connectionTimerTimeoutSlot);
+                    this,               &IpRecorderWgt  ::slConnectionTimerTimeoutSlot);
             connectionTimer->start(200);
         }
-        ui->rbServerChoice->setEnabled(false);
-        ui->pbConnectToServer->setText("Отменить");
+
+        ui->pbStartServer->setEnabled(false);
+        ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
         ui->lePortName->setEnabled(false);
     }
 }
@@ -140,11 +159,11 @@ void  IpRecorderWgt::newServerConnectionSlot()
         socket = server->nextPendingConnection();
 
         connect(socket,         &QTcpSocket     ::disconnected,
-                this,           &IpRecorderWgt  ::socketDisconnected);
+                this,           &IpRecorderWgt  ::slSocketDisconnected);
         connect(socket,         &QTcpSocket     ::readyRead,
-                recorderForm,   &RecorderForm   ::writeToFile       );
+                recorderForm,   &RecorderForm   ::slWriteToFile       );
 
-        socketConnected();
+        slSocketConnected();
     }
 }
 
@@ -152,7 +171,7 @@ void  IpRecorderWgt::newServerConnectionSlot()
 
 
 //=================================== Слот установки соединения сокета
-void IpRecorderWgt::socketConnected()
+void IpRecorderWgt::slSocketConnected()
 {
     socket->open(QIODevice::ReadWrite);
 
@@ -161,20 +180,28 @@ void IpRecorderWgt::socketConnected()
     }
 
     if (ui->pbConnectToServer->isChecked()) {
-        ui->pbConnectToServer->setText("Разъединиться");
+        ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
     }
 
     ui->lbConnectionStatus->setText("Установлено соединение");
     ui->lbConnectionStatus->setStyleSheet("background-color: rgb(64, 152, 50);");
+
+    temp.start(500);
+    connect(&temp, &QTimer::timeout, [=] {
+        static long code = 111;
+        if (socket->isOpen()) {
+            socket->write((const char*)&code, 4);
+        }
+    });
 }
 
 
 
 
 //=================================== Слот разрыва соединения сокета
-void IpRecorderWgt::socketDisconnected()
+void IpRecorderWgt::slSocketDisconnected()
 {
-    ui->pbConnectToServer->setText("Соединиться");
+    ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-play-16.png"));
     socket->deleteLater();
     socket = NULL;
     if (playerForm) {
@@ -188,12 +215,11 @@ void IpRecorderWgt::socketDisconnected()
 
 
 //=================================== Слот таймера соединения
-void IpRecorderWgt::connectionTimerTimeoutSlot()
+void IpRecorderWgt::slConnectionTimerTimeoutSlot()
 {
     if (socket->state() == QAbstractSocket::UnconnectedState) {
         connectToHost();
-    }
-    else if (socket->state() == QAbstractSocket::ConnectedState) {
+    } else if (socket->state() == QAbstractSocket::ConnectedState) {
         closeConnectionTimer();
     }
 }
@@ -226,15 +252,5 @@ void IpRecorderWgt::closeConnectionTimer()
         connectionTimer = NULL;
     }
 }
-
-
-
-
-//===================================
-void IpRecorderWgt::on_rbServerChoice_toggled(bool checked)
-{
-    ui->pbStartServer->setEnabled(checked);
-}
-
 
 

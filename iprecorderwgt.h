@@ -24,18 +24,15 @@ public:
 
 private slots:
     void on_pbStartServer_released          ();
-    void on_rbClientChoice_toggled          (bool checked);
     void on_pbConnectToServer_released      ();
 
     void newServerConnectionSlot            ();
-    void socketConnected                    ();
-    void socketDisconnected                 ();
+    void slSocketConnected                  ();
+    void slSocketDisconnected               ();
 
-    void connectionTimerTimeoutSlot         ();
+    void slConnectionTimerTimeoutSlot       ();
 
     void closeConnectionTimer               ();
-
-    void on_rbServerChoice_toggled(bool checked);
 
 private:
     Ui::IpRecorderWgt   *ui             {NULL};
@@ -45,7 +42,10 @@ private:
     PlayerForm          *playerForm     {NULL};
     RecorderForm        *recorderForm   {NULL};
 
+    QTimer              temp;
+
     void connectToHost                      ();
+    void initSettings                       ();
 };
 
 #endif // IPRECORDERWGT_H

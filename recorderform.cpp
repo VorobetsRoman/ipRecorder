@@ -107,7 +107,7 @@ void RecorderForm::on_pbPauseRecord_released()
 
 
 //=================================== Функция записи в файл
-void RecorderForm::writeToFile()
+void RecorderForm::slWriteToFile()
 {
     if (!workFile) return;
     if (!workFile->isOpen()) return;
@@ -158,7 +158,6 @@ void RecorderForm::writeHeader()
     fileHeader.timeMarkerExist = ui->cbTimeMarker->isChecked() ? 1 : 0;
     workFile->write((char*)&fileHeader, headerSize);
 }
-
 
 
 

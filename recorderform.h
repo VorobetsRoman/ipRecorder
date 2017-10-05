@@ -19,7 +19,7 @@ public:
         ~RecorderForm                       ();
 
 public slots:
-    void writeToFile                        ();
+    void slWriteToFile                        ();
 
 private slots:
     void on_tbFileNameForRecording_released ();
