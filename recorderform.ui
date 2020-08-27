@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>311</width>
-    <height>110</height>
+    <height>155</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,14 @@
    <item>
     <widget class="QCheckBox" name="cbTimeMarker">
      <property name="text">
-      <string>Включить временной маркер</string>
+      <string>Временной маркер</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cbCompression">
+     <property name="text">
+      <string>Сжатие</string>
      </property>
     </widget>
    </item>
@@ -152,6 +159,39 @@
        </property>
        <property name="text">
         <string>Мб</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Время записи:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lb_recTime">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>00:00:00.000</string>
        </property>
       </widget>
      </item>

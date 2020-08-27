@@ -132,16 +132,16 @@ void IpRecorderWgt::on_pbConnectToServer_released()
         }
     } else {
         mp_socket = new QTcpSocket();
-        connect(mp_socket,         &QTcpSocket     ::connected,
-                this,           &IpRecorderWgt  ::sl_socketConnected   );
-        connect(mp_socket,         &QTcpSocket     ::disconnected,
-                this,           &IpRecorderWgt  ::sl_socketDisconnected);
-        connect(mp_socket,         &QTcpSocket     ::readyRead,
-                mp_recorderForm,   &RecorderForm   ::sl_writeToFile       );
+        connect(mp_socket,          &QTcpSocket     ::connected,
+                this,               &IpRecorderWgt  ::sl_socketConnected   );
+        connect(mp_socket,          &QTcpSocket     ::disconnected,
+                this,               &IpRecorderWgt  ::sl_socketDisconnected);
+        connect(mp_socket,          &QTcpSocket     ::readyRead,
+                mp_recorderForm,    &RecorderForm   ::sl_writeToFile       );
         m_connectToHost();
         if (!mp_connectionTimer) {
             mp_connectionTimer = new QTimer();
-            connect(mp_connectionTimer,    &QTimer         ::timeout,
+            connect(mp_connectionTimer, &QTimer         ::timeout,
                     this,               &IpRecorderWgt  ::sl_connectionTimerTimeout);
             mp_connectionTimer->start(200);
         }
@@ -189,13 +189,13 @@ void IpRecorderWgt::sl_socketConnected()
     mp_ui->lbConnectionStatus->setText("Установлено соединение");
     mp_ui->lbConnectionStatus->setStyleSheet("background-color: rgb(64, 152, 50);");
 
-    m_temp.start(500);
-    connect(&m_temp, &QTimer::timeout, [=] {
-        static long code = 111;
-        if (mp_socket->isOpen()) {
-            mp_socket->write((const char*)&code, 4);
-        }
-    });
+//    m_temp.start(500);
+//    connect(&m_temp, &QTimer::timeout, [=] {
+//        static long code = 111;
+//        if (mp_socket->isOpen()) {
+//            mp_socket->write((const char*)&code, 4);
+//        }
+//    });
 }
 
 
@@ -235,10 +235,10 @@ void IpRecorderWgt::m_connectToHost()
 {
     bool success {true};
     mp_socket->connectToHost(mp_ui->leServerName->text(),
-                          mp_ui->lePortName->text().toInt(&success, 10),
-                          QIODevice::ReadWrite);
+                             mp_ui->lePortName->text().toInt(&success, 10),
+                             QIODevice::ReadWrite);
     if (!success) {
-        QMessageBox::warning(0, "Ошибка", "Ошибочно указан порт");
+        QMessageBox::warning(nullptr, "Ошибка", "Ошибочно указан порт");
     }
 }
 

@@ -27,6 +27,7 @@ class Ui_RecorderForm
 public:
     QVBoxLayout *verticalLayout;
     QCheckBox *cbTimeMarker;
+    QCheckBox *cbCompression;
     QHBoxLayout *horizontalLayout_4;
     QToolButton *tbFileNameForRecording;
     QLabel *lbFileNameForRecording;
@@ -37,18 +38,26 @@ public:
     QLabel *lbRecordedCount;
     QLabel *lbRecordedSize;
     QLabel *lb;
+    QHBoxLayout *horizontalLayout;
+    QLabel *label_2;
+    QLabel *lb_recTime;
 
     void setupUi(QWidget *RecorderForm)
     {
         if (RecorderForm->objectName().isEmpty())
             RecorderForm->setObjectName(QString::fromUtf8("RecorderForm"));
-        RecorderForm->resize(311, 110);
+        RecorderForm->resize(311, 155);
         verticalLayout = new QVBoxLayout(RecorderForm);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         cbTimeMarker = new QCheckBox(RecorderForm);
         cbTimeMarker->setObjectName(QString::fromUtf8("cbTimeMarker"));
 
         verticalLayout->addWidget(cbTimeMarker);
+
+        cbCompression = new QCheckBox(RecorderForm);
+        cbCompression->setObjectName(QString::fromUtf8("cbCompression"));
+
+        verticalLayout->addWidget(cbCompression);
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
@@ -119,6 +128,24 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_7);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        label_2 = new QLabel(RecorderForm);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setMaximumSize(QSize(16777215, 20));
+        label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout->addWidget(label_2);
+
+        lb_recTime = new QLabel(RecorderForm);
+        lb_recTime->setObjectName(QString::fromUtf8("lb_recTime"));
+        lb_recTime->setMaximumSize(QSize(16777215, 20));
+
+        horizontalLayout->addWidget(lb_recTime);
+
+
+        verticalLayout->addLayout(horizontalLayout);
+
 
         retranslateUi(RecorderForm);
 
@@ -128,7 +155,8 @@ public:
     void retranslateUi(QWidget *RecorderForm)
     {
         RecorderForm->setWindowTitle(QApplication::translate("RecorderForm", "Form", nullptr));
-        cbTimeMarker->setText(QApplication::translate("RecorderForm", "\320\222\320\272\320\273\321\216\321\207\320\270\321\202\321\214 \320\262\321\200\320\265\320\274\320\265\320\275\320\275\320\276\320\271 \320\274\320\260\321\200\320\272\320\265\321\200", nullptr));
+        cbTimeMarker->setText(QApplication::translate("RecorderForm", "\320\222\321\200\320\265\320\274\320\265\320\275\320\275\320\276\320\271 \320\274\320\260\321\200\320\272\320\265\321\200", nullptr));
+        cbCompression->setText(QApplication::translate("RecorderForm", "\320\241\320\266\320\260\321\202\320\270\320\265", nullptr));
         tbFileNameForRecording->setText(QApplication::translate("RecorderForm", "...", nullptr));
         lbFileNameForRecording->setText(QApplication::translate("RecorderForm", "\320\230\320\274\321\217 \321\204\320\260\320\271\320\273\320\260 \320\264\320\273\321\217 \320\267\320\260\320\277\320\270\321\201\320\270", nullptr));
         pbStartStopRecord->setText(QString());
@@ -137,6 +165,8 @@ public:
         lbRecordedCount->setText(QApplication::translate("RecorderForm", "0", nullptr));
         lbRecordedSize->setText(QApplication::translate("RecorderForm", "0", nullptr));
         lb->setText(QApplication::translate("RecorderForm", "\320\234\320\261", nullptr));
+        label_2->setText(QApplication::translate("RecorderForm", "\320\222\321\200\320\265\320\274\321\217 \320\267\320\260\320\277\320\270\321\201\320\270:", nullptr));
+        lb_recTime->setText(QApplication::translate("RecorderForm", "00:00:00.000", nullptr));
     } // retranslateUi
 
 };

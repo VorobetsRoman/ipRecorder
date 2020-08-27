@@ -39,7 +39,7 @@ private:
     PlayerForm          *mp_playerForm     {nullptr}; ///<
     RecorderForm        *mp_recorderForm   {nullptr}; ///<
 
-    QTimer              m_temp;                       ///<
+//    QTimer              m_temp;             ///< Timer for KDA
 
     void m_closeConnectionTimer();
     void m_connectToHost();
