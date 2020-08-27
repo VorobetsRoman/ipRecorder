@@ -11,9 +11,9 @@
 //=================================== Конструктор
 PlayerForm::PlayerForm(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PlayerForm)
+    mp_ui(new Ui::PlayerForm)
 {
-    ui->setupUi(this);
+    mp_ui->setupUi(this);
 }
 
 
@@ -22,19 +22,19 @@ PlayerForm::PlayerForm(QWidget *parent) :
 //=================================== Деструктор
 PlayerForm::~PlayerForm()
 {
-    if (playTimer) {
-        if (playTimer->isActive()) playTimer->stop();
-        playTimer->deleteLater();
+    if (mp_playTimer) {
+        if (mp_playTimer->isActive()) mp_playTimer->stop();
+        mp_playTimer->deleteLater();
     }
-    if (workFile) {
-        if (workFile->isOpen()) workFile->close();
-        workFile->deleteLater();
+    if (mp_workFile) {
+        if (mp_workFile->isOpen()) mp_workFile->close();
+        mp_workFile->deleteLater();
     }
-    if (socket) {
-        if (socket->isOpen()) socket->close();
-        socket->deleteLater();
+    if (mp_socket) {
+        if (mp_socket->isOpen()) mp_socket->close();
+        mp_socket->deleteLater();
     }
-    delete ui;
+    delete mp_ui;
 }
 
 
@@ -47,46 +47,46 @@ void PlayerForm::on_tbFileNameForPlayer_released()
     QString fileName = QFileDialog::getOpenFileName(0, "Файл для чтения", qApp->applicationDirPath(), "*.dat");
     if (fileName == "") return;
 
-    if (!workFile) {
-        workFile = new QFile();
+    if (!mp_workFile) {
+        mp_workFile = new QFile();
     } else {
-        if (workFile->isOpen()) {
-            workFile->close();
+        if (mp_workFile->isOpen()) {
+            mp_workFile->close();
         }
     }
 
     QFile test(fileName);
-    workFile->setFileName(fileName);
-    if (!workFile->open(QIODevice::ReadOnly)) {
+    mp_workFile->setFileName(fileName);
+    if (!mp_workFile->open(QIODevice::ReadOnly)) {
         QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
         return;
     }
 
-    ui->lbFileNameForPlayer->setText(fileName);
+    mp_ui->lbFileNameForPlayer->setText(fileName);
 
     // Вычитать заголовок из файла, определить наличие временного маркера
     qint64 fileHeaderSize {0};
-    workFile->read((char*)&fileHeaderSize, sizeof(fileHeaderSize));
+    mp_workFile->read((char*)&fileHeaderSize, sizeof(fileHeaderSize));
     FileHeader fileHeader;
-    workFile->read((char*)&fileHeader, fileHeaderSize);
+    mp_workFile->read((char*)&fileHeader, fileHeaderSize);
     switch (fileHeader.timeMarkerExist) {
     case 0:
-        timeMarkerExist = false;
-        ui->rbSetPlaySpeed->toggle();
-        ui->rbTimeMarkerIsOn->setDisabled(true);
+        m_timeMarkerExist = false;
+        mp_ui->rbSetPlaySpeed->toggle();
+        mp_ui->rbTimeMarkerIsOn->setDisabled(true);
         break;
     case 1:
-        timeMarkerExist = true;
-        ui->rbTimeMarkerIsOn->setEnabled(true);
+        m_timeMarkerExist = true;
+        mp_ui->rbTimeMarkerIsOn->setEnabled(true);
         break;
     default:
         break;
     }
 
     // Если есть временной маркер, выкинуть его первое значение
-    if (timeMarkerExist) {
+    if (m_timeMarkerExist) {
         qint32 timeDelay;
-        workFile->read((char*)&timeDelay, sizeof(timeDelay));
+        mp_workFile->read((char*)&timeDelay, sizeof(timeDelay));
     }
 }
 
@@ -96,7 +96,7 @@ void PlayerForm::on_tbFileNameForPlayer_released()
 //=================================== Слот использования скорости воспроизведения
 void PlayerForm::on_rbSetPlaySpeed_toggled(bool)
 {
-    if (playTimer && playTimer->isActive()) {
+    if (mp_playTimer && mp_playTimer->isActive()) {
 //        playTimer->setInterval(playDelay);
     }
 }
@@ -107,8 +107,8 @@ void PlayerForm::on_rbSetPlaySpeed_toggled(bool)
 //=================================== Слот использования сохраненной задержки перед воспроизведением
 void PlayerForm::on_rbTimeMarkerIsOn_toggled(bool)
 {
-    if (playTimer && playTimer->isActive()) {
-        playTimer->setInterval(playDelay);
+    if (mp_playTimer && mp_playTimer->isActive()) {
+        mp_playTimer->setInterval(m_playDelay);
     }
 }
 
@@ -118,9 +118,9 @@ void PlayerForm::on_rbTimeMarkerIsOn_toggled(bool)
 //=================================== Слот изменения скорости воспроизведения
 void PlayerForm::on_hsPlaySpeed_sliderMoved(int position)
 {
-    playDelay = pow(3, position);
-    if (playTimer && playTimer->isActive()) {
-        playTimer->setInterval(playDelay);
+    m_playDelay = pow(3, position);
+    if (mp_playTimer && mp_playTimer->isActive()) {
+        mp_playTimer->setInterval(m_playDelay);
     }
 }
 
@@ -130,33 +130,33 @@ void PlayerForm::on_hsPlaySpeed_sliderMoved(int position)
 //=================================== Слот кнопки запуска воспроизведения
 void PlayerForm::on_pbStartStopPlayer_released()
 {
-    if (!(workFile && workFile->isOpen()
-          && socket && socket->isOpen())) return;
+    if (!(mp_workFile && mp_workFile->isOpen()
+          && mp_socket && mp_socket->isOpen())) return;
 
-    if (playingIsOn)
+    if (m_playingIsOn)
     {
-        ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-play-16.png"));
-        workFile->close();
-        if (playTimer) {
-            playTimer->stop();
+        mp_ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-play-16.png"));
+        mp_workFile->close();
+        if (mp_playTimer) {
+            mp_playTimer->stop();
         }
     } else {
-        ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
-        if (!workFile->isOpen()) {
-            if (!workFile->open(QIODevice::ReadOnly)) {
+        mp_ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
+        if (!mp_workFile->isOpen()) {
+            if (!mp_workFile->open(QIODevice::ReadOnly)) {
                 qDebug() << "file open is unsuccessfully";
                 return;
             }
         }
 
-        if (!playTimer) {
-            playTimer = new QTimer;
-            connect(playTimer,  &QTimer         ::timeout,
-                    this,       &PlayerForm     ::playTimerTimeoutSlot);
+        if (!mp_playTimer) {
+            mp_playTimer = new QTimer;
+            connect(mp_playTimer,  &QTimer         ::timeout,
+                    this,       &PlayerForm     ::sl_playTimerTimeout);
         }
-        playTimer->start(playDelay);
+        mp_playTimer->start(m_playDelay);
     }
-    playingIsOn = !playingIsOn;
+    m_playingIsOn = !m_playingIsOn;
 }
 
 
@@ -172,34 +172,34 @@ void PlayerForm::on_pbPausePlay_released()
 
 
 //=================================== Слот таймера воспроизведения
-void PlayerForm::playTimerTimeoutSlot()
+void PlayerForm::sl_playTimerTimeout()
 {
-    if (!workFile->isOpen()) return;
-    if (!socket) return;
-    if (!socket->isOpen()) return;
-    if (workFile->atEnd()) {
-        workFileAtEnd();
+    if (!mp_workFile->isOpen()) return;
+    if (!mp_socket) return;
+    if (!mp_socket->isOpen()) return;
+    if (mp_workFile->atEnd()) {
+        m_workFileAtEnd();
         return;
     }
 
     qint64 packetSize {0};
-    workFile->read((char*)&packetSize, sizeof(packetSize));
-    QByteArray ba = workFile->read(packetSize);
-    socket->write(ba);
+    mp_workFile->read((char*)&packetSize, sizeof(packetSize));
+    QByteArray ba = mp_workFile->read(packetSize);
+    mp_socket->write(ba);
 
 //    int filePos = 100 * workFile->pos() / workFile->size();
-    ui->progressPlayer->setValue(100 * workFile->pos() / workFile->size());
+    mp_ui->progressPlayer->setValue(100 * mp_workFile->pos() / mp_workFile->size());
 
-    if (workFile->atEnd()) {
-        workFileAtEnd();
+    if (mp_workFile->atEnd()) {
+        m_workFileAtEnd();
         return;
     }
 
-    if (timeMarkerExist) {
+    if (m_timeMarkerExist) {
         qint32 timeDelay {0};
-        workFile->read((char*)&timeDelay, sizeof(timeDelay));
-        if (ui->rbTimeMarkerIsOn->isChecked()) {
-            playTimer->setInterval(timeDelay);
+        mp_workFile->read((char*)&timeDelay, sizeof(timeDelay));
+        if (mp_ui->rbTimeMarkerIsOn->isChecked()) {
+            mp_playTimer->setInterval(timeDelay);
         }
     }
 }
@@ -210,17 +210,17 @@ void PlayerForm::playTimerTimeoutSlot()
 //=================================== Инициализация сокета, в который будет происходить запись
 void PlayerForm::setSocket(QTcpSocket *newSocket)
 {
-    socket = newSocket;
+    mp_socket = newSocket;
 }
 
 
 
 
-void PlayerForm::workFileAtEnd()
+void PlayerForm::m_workFileAtEnd()
 {
-    workFile->seek(0);
-    playTimer->stop();
-    playingIsOn = false;
+    mp_workFile->seek(0);
+    mp_playTimer->stop();
+    m_playingIsOn = false;
 }
 
 

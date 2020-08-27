@@ -15,29 +15,29 @@ class RecorderForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit RecorderForm                   (QWidget *parent = 0);
-        ~RecorderForm                       ();
+    explicit RecorderForm(QWidget *parent = nullptr);
+        ~RecorderForm();
 
 public slots:
-    void slWriteToFile                        ();
+    void sl_writeToFile();
 
 private slots:
-    void on_tbFileNameForRecording_released ();
-    void on_pbStartStopRecord_released      ();
-    void on_pbPauseRecord_released          ();
+    void on_tbFileNameForRecording_released();
+    void on_pbStartStopRecord_released();
+    void on_pbPauseRecord_released();
 
-    void on_cbTimeMarker_toggled            (bool checked);
+    void on_cbTimeMarker_toggled(bool checked);
 
 private:
-    Ui::RecorderForm *ui        {NULL};
-    QFile       *workFile       {NULL};
-    bool        recordingOn     {false};
-    bool        pauseOn         {false};
-    qint64      tickCount       {0};
-    qint64      fileSize        {0};
-    QTime       lastTime;
+    Ui::RecorderForm *mp_ui        {nullptr};
+    QFile       *mp_workFile       {nullptr};
+    bool        m_recordingOn     {false};
+    bool        m_pauseOn         {false};
+    qint64      m_tickCount       {0};
+    qint64      m_fileSize        {0};
+    QTime       m_lastTime;
 
-    void writeHeader                        ();
+    void writeHeader();
 };
 
 #endif // RECORDERFORM_H

@@ -12,11 +12,11 @@ class SplitForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit SplitForm(QWidget *parent = 0);
+    explicit SplitForm(QWidget *parent = nullptr);
     ~SplitForm();
 
 private:
-    Ui::SplitForm *ui;
+    Ui::SplitForm *mp_ui;
 };
 
 #endif // SPLITFORM_H

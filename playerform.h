@@ -15,32 +15,32 @@ class PlayerForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit PlayerForm                 (QWidget *parent = 0);
-        ~PlayerForm                     ();
-    void setSocket                      (QTcpSocket* newSocket);
+    explicit PlayerForm(QWidget *parent = nullptr);
+        ~PlayerForm();
+    void setSocket(QTcpSocket* newSocket);
 
 private slots:
     void on_tbFileNameForPlayer_released();
-    void on_rbSetPlaySpeed_toggled      (bool checked);
-    void on_rbTimeMarkerIsOn_toggled    (bool checked);
-    void on_hsPlaySpeed_sliderMoved     (int position);
-    void on_pbStartStopPlayer_released  ();
-    void on_pbPausePlay_released        ();
+    void on_rbSetPlaySpeed_toggled(bool checked);
+    void on_rbTimeMarkerIsOn_toggled(bool checked);
+    void on_hsPlaySpeed_sliderMoved(int position);
+    void on_pbStartStopPlayer_released();
+    void on_pbPausePlay_released();
 
-    void playTimerTimeoutSlot           ();
+    void sl_playTimerTimeout();
 
 private:
-    Ui::PlayerForm *ui      {NULL};
+    Ui::PlayerForm *mp_ui           {nullptr};
 
-    bool        playingIsOn {false};
-    bool        pauseIsOn   {false};
-    QTimer      *playTimer  {NULL};
-    qint64      playDelay   {2000};
-    QFile       *workFile   {NULL};
-    QTcpSocket  *socket     {NULL};
-    bool        timeMarkerExist {false};
+    bool        m_playingIsOn       {false};
+    bool        m_pauseIsOn         {false};
+    QTimer      *mp_playTimer       {nullptr};
+    qint64      m_playDelay         {2000};
+    QFile       *mp_workFile        {nullptr};
+    QTcpSocket  *mp_socket          {nullptr};
+    bool        m_timeMarkerExist   {false};
 
-    void workFileAtEnd  ();
+    void m_workFileAtEnd();
 };
 
 #endif // PLAYERFORM_H

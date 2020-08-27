@@ -11,9 +11,9 @@
 //=================================== Конструктор
 RecorderForm::RecorderForm(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RecorderForm)
+    mp_ui(new Ui::RecorderForm)
 {
-    ui->setupUi(this);
+    mp_ui->setupUi(this);
 }
 
 
@@ -22,13 +22,13 @@ RecorderForm::RecorderForm(QWidget *parent) :
 //=================================== Деструктор
 RecorderForm::~RecorderForm()
 {
-    if (workFile){
-        if (workFile->isOpen()) {
-            workFile->close();
+    if (mp_workFile){
+        if (mp_workFile->isOpen()) {
+            mp_workFile->close();
         }
-        workFile->deleteLater();
+        mp_workFile->deleteLater();
     }
-    delete ui;
+    delete mp_ui;
 }
 
 
@@ -41,22 +41,22 @@ void RecorderForm::on_tbFileNameForRecording_released()
     QString fileName = QFileDialog::getSaveFileName(0, "Файл для записи", qApp->applicationDirPath(), "*.dat");
     if (fileName == "") return;
 
-    if (!workFile) {
-        workFile = new QFile();
+    if (!mp_workFile) {
+        mp_workFile = new QFile();
     }
     else {
-        if (workFile->isOpen()) {
-            workFile->close();
+        if (mp_workFile->isOpen()) {
+            mp_workFile->close();
         }
     }
 
-    workFile->setFileName(fileName);
-    if (!workFile->open(QIODevice::WriteOnly)) {
+    mp_workFile->setFileName(fileName);
+    if (!mp_workFile->open(QIODevice::WriteOnly)) {
         QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
         return;
     }
 
-    ui->lbFileNameForRecording->setText(fileName);
+    mp_ui->lbFileNameForRecording->setText(fileName);
 
     writeHeader();
 }
@@ -68,24 +68,24 @@ void RecorderForm::on_tbFileNameForRecording_released()
 void RecorderForm::on_pbStartStopRecord_released()
 {
     // По нажатию на кнопку "старт" файл пишется с начала
-    if (recordingOn) {
-        ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-record-16.png"));
-        ui->cbTimeMarker->setEnabled(true);
-        if (workFile && workFile->isOpen()) {
-            workFile->close();
+    if (m_recordingOn) {
+        mp_ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-record-16.png"));
+        mp_ui->cbTimeMarker->setEnabled(true);
+        if (mp_workFile && mp_workFile->isOpen()) {
+            mp_workFile->close();
         }
     }
     else {
-        ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-stop-32.png"));
-        ui->cbTimeMarker->setEnabled(false);
-        if (workFile && !workFile->isOpen()) {
-            workFile->open(QIODevice::WriteOnly);
-            tickCount = 0;
-            fileSize = 0;
-            lastTime = QTime::currentTime();
+        mp_ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-stop-32.png"));
+        mp_ui->cbTimeMarker->setEnabled(false);
+        if (mp_workFile && !mp_workFile->isOpen()) {
+            mp_workFile->open(QIODevice::WriteOnly);
+            m_tickCount = 0;
+            m_fileSize = 0;
+            m_lastTime = QTime::currentTime();
         }
     }
-    recordingOn = !recordingOn;
+    m_recordingOn = !m_recordingOn;
 }
 
 
@@ -94,41 +94,41 @@ void RecorderForm::on_pbStartStopRecord_released()
 //=================================== Кнопка паузы записи
 void RecorderForm::on_pbPauseRecord_released()
 {
-    if (pauseOn) {
+    if (m_pauseOn) {
 //        ui->pbPauseRecord->setIcon(QIcon(":\Buttons\media-pause-16.png"));
     }
     else {
 //        ui->pbPauseRecord->setIcon(QIcon(":\Buttons\media-record-16.png"));
     }
-    pauseOn = !pauseOn;
+    m_pauseOn = !m_pauseOn;
 }
 
 
 
 
 //=================================== Функция записи в файл
-void RecorderForm::slWriteToFile()
+void RecorderForm::sl_writeToFile()
 {
-    if (!workFile) return;
-    if (!workFile->isOpen()) return;
-    if (!recordingOn) return;
+    if (!mp_workFile) return;
+    if (!mp_workFile->isOpen()) return;
+    if (!m_recordingOn) return;
 
-    if (ui->cbTimeMarker->isChecked()) {
-        qint32 timeDelay = lastTime.msecsTo(QTime::currentTime());
-        lastTime = QTime::currentTime();
-        workFile->write((char*)&timeDelay, sizeof(timeDelay));
+    if (mp_ui->cbTimeMarker->isChecked()) {
+        qint32 timeDelay = m_lastTime.msecsTo(QTime::currentTime());
+        m_lastTime = QTime::currentTime();
+        mp_workFile->write((char*)&timeDelay, sizeof(timeDelay));
     }
 
     QTcpSocket* socket = (QTcpSocket*)sender() ;
     QByteArray ba = socket->readAll();
     qint64 packetSize = ba.size();
-    workFile->write((char*)&packetSize, sizeof(packetSize));
-    workFile->write(ba);
+    mp_workFile->write((char*)&packetSize, sizeof(packetSize));
+    mp_workFile->write(ba);
 
-    tickCount++;
-    fileSize += packetSize;
-    ui->lbRecordedCount->setText(QString::number(tickCount));
-    ui->lbRecordedSize->setText(QString::number(fileSize / (1024 * 1024)));
+    m_tickCount++;
+    m_fileSize += packetSize;
+    mp_ui->lbRecordedCount->setText(QString::number(m_tickCount));
+    mp_ui->lbRecordedSize->setText(QString::number(m_fileSize / (1024 * 1024)));
 }
 
 
@@ -137,7 +137,7 @@ void RecorderForm::slWriteToFile()
 //=================================== Слот отметки включения маркера
 void RecorderForm::on_cbTimeMarker_toggled(bool)
 {
-    if (workFile && workFile->isOpen()) {
+    if (mp_workFile && mp_workFile->isOpen()) {
         writeHeader();
     }
 }
@@ -150,13 +150,13 @@ void RecorderForm::writeHeader()
 {
     // Перейти в начало файла, записать размер заголовка,
     // Записать сам заголовок
-    workFile->seek(0);
+    mp_workFile->seek(0);
     qint64 headerSize = sizeof(FileHeader);
-    workFile->write((char*)&headerSize, sizeof(headerSize));
+    mp_workFile->write((char*)&headerSize, sizeof(headerSize));
 
     FileHeader fileHeader;
-    fileHeader.timeMarkerExist = ui->cbTimeMarker->isChecked() ? 1 : 0;
-    workFile->write((char*)&fileHeader, headerSize);
+    fileHeader.timeMarkerExist = mp_ui->cbTimeMarker->isChecked() ? 1 : 0;
+    mp_workFile->write((char*)&fileHeader, headerSize);
 }
 
 

@@ -19,33 +19,31 @@ class IpRecorderWgt : public QWidget
     Q_OBJECT
 
 public:
-    explicit IpRecorderWgt                  (QWidget *parent = 0);
-        ~IpRecorderWgt                      ();
+    explicit IpRecorderWgt(QWidget *parent = nullptr);
+        ~IpRecorderWgt();
 
 private slots:
-    void on_pbStartServer_released          ();
-    void on_pbConnectToServer_released      ();
+    void on_pbStartServer_released();
+    void on_pbConnectToServer_released();
 
-    void newServerConnectionSlot            ();
-    void slSocketConnected                  ();
-    void slSocketDisconnected               ();
-
-    void slConnectionTimerTimeoutSlot       ();
-
-    void closeConnectionTimer               ();
+    void sl_newServerConnection();
+    void sl_socketConnected();
+    void sl_socketDisconnected();
+    void sl_connectionTimerTimeout();
 
 private:
-    Ui::IpRecorderWgt   *ui             {NULL};
-    QTcpServer          *server         {NULL};
-    QTcpSocket          *socket         {NULL};
-    QTimer              *connectionTimer{NULL};
-    PlayerForm          *playerForm     {NULL};
-    RecorderForm        *recorderForm   {NULL};
+    Ui::IpRecorderWgt   *mp_ui             {nullptr}; ///<
+    QTcpServer          *mp_server         {nullptr}; ///<
+    QTcpSocket          *mp_socket         {nullptr}; ///<
+    QTimer              *mp_connectionTimer{nullptr}; ///<
+    PlayerForm          *mp_playerForm     {nullptr}; ///<
+    RecorderForm        *mp_recorderForm   {nullptr}; ///<
 
-    QTimer              temp;
+    QTimer              m_temp;                       ///<
 
-    void connectToHost                      ();
-    void initSettings                       ();
+    void m_closeConnectionTimer();
+    void m_connectToHost();
+    void m_initSettings();
 };
 
 #endif // IPRECORDERWGT_H

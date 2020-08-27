@@ -3,12 +3,12 @@
 
 SplitForm::SplitForm(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SplitForm)
+    mp_ui(new Ui::SplitForm)
 {
-    ui->setupUi(this);
+    mp_ui->setupUi(this);
 }
 
 SplitForm::~SplitForm()
 {
-    delete ui;
+    delete mp_ui;
 }
