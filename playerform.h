@@ -39,6 +39,7 @@ private:
     QFile       *mp_workFile        {nullptr};
     QTcpSocket  *mp_socket          {nullptr};
     bool        m_timeMarkerExist   {false};
+    bool        m_compressionExist  {false};
 
     void m_workFileAtEnd();
 };

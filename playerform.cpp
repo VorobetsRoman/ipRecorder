@@ -55,7 +55,7 @@ void PlayerForm::on_tbFileNameForPlayer_released()
         }
     }
 
-    QFile test(fileName);
+//    QFile test(fileName);
     mp_workFile->setFileName(fileName);
     if (!mp_workFile->open(QIODevice::ReadOnly)) {
         QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
@@ -65,10 +65,10 @@ void PlayerForm::on_tbFileNameForPlayer_released()
     mp_ui->lbFileNameForPlayer->setText(fileName);
 
     // Вычитать заголовок из файла, определить наличие временного маркера
-    qint64 fileHeaderSize {0};
-    mp_workFile->read((char*)&fileHeaderSize, sizeof(fileHeaderSize));
+//    qint64 fileHeaderSize {0};
+//    mp_workFile->read((char*)&fileHeaderSize, sizeof(fileHeaderSize));
     FileHeader fileHeader;
-    mp_workFile->read((char*)&fileHeader, fileHeaderSize);
+    mp_workFile->read((char*)&fileHeader, FileHeader::size());
     switch (fileHeader.timeMarkerExist) {
     case 0:
         m_timeMarkerExist = false;
@@ -81,6 +81,10 @@ void PlayerForm::on_tbFileNameForPlayer_released()
         break;
     default:
         break;
+    }
+
+    if (fileHeader.compressionExist) {
+        m_compressionExist = true;
     }
 
     // Если есть временной маркер, выкинуть его первое значение
@@ -151,8 +155,8 @@ void PlayerForm::on_pbStartStopPlayer_released()
 
         if (!mp_playTimer) {
             mp_playTimer = new QTimer;
-            connect(mp_playTimer,  &QTimer         ::timeout,
-                    this,       &PlayerForm     ::sl_playTimerTimeout);
+            connect(mp_playTimer,   &QTimer         ::timeout,
+                    this,           &PlayerForm     ::sl_playTimerTimeout);
         }
         mp_playTimer->start(m_playDelay);
     }
@@ -185,6 +189,9 @@ void PlayerForm::sl_playTimerTimeout()
     qint64 packetSize {0};
     mp_workFile->read((char*)&packetSize, sizeof(packetSize));
     QByteArray ba = mp_workFile->read(packetSize);
+    if (m_compressionExist) {
+        ba = qUncompress(ba);
+    }
     mp_socket->write(ba);
 
 //    int filePos = 100 * workFile->pos() / workFile->size();
