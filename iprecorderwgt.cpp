@@ -122,7 +122,7 @@ void  IpRecorderWgt::sl_newServerConnection()
         mp_socket = mp_server->nextPendingConnection();
 
         connect(mp_socket,          &QTcpSocket     ::disconnected,
-                this,               &IpRecorderWgt  ::sl_socketDisconnected);
+                this,               &IpRecorderWgt  ::sl_serverDisconnected);
         connect(mp_socket,          &QTcpSocket     ::readyRead,
                 mp_recorderForm,    &RecorderForm   ::sl_writeToFile       );
 
@@ -150,11 +150,26 @@ void IpRecorderWgt::sl_socketConnected()
 //=================================== Слот разрыва соединения сокета
 void IpRecorderWgt::sl_socketDisconnected()
 {
-    mp_ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-play-16.png"));
+//    mp_ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-play-16.png"));
     mp_socket->deleteLater();
     mp_socket = nullptr;
-    if (mp_playerForm) {
-        mp_playerForm->setSocket(nullptr);
+    if (mp_playerForm) {                   //убрать?
+        mp_playerForm->setSocket(nullptr); //убрать?
+    }
+    mp_ui->lbConnectionStatus->setText("Соединение потеряно");
+    mp_ui->lbConnectionStatus->setStyleSheet("background-color: rgb(211, 36, 54);");
+}
+
+
+
+
+//===================================
+void IpRecorderWgt::sl_serverDisconnected()
+{
+    mp_socket->deleteLater();
+    mp_socket = nullptr;
+    if (mp_playerForm) {                   //убрать?
+        mp_playerForm->setSocket(nullptr); //убрать?
     }
     mp_ui->lbConnectionStatus->setText("Соединение потеряно");
     mp_ui->lbConnectionStatus->setStyleSheet("background-color: rgb(211, 36, 54);");

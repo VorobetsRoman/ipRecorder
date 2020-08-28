@@ -33,6 +33,7 @@ private slots:
     void sl_newServerConnection();
     void sl_socketConnected();
     void sl_socketDisconnected();
+    void sl_serverDisconnected();
 
 private:
     Ui::IpRecorderWgt   *mp_ui             {nullptr}; ///< Форма окна
