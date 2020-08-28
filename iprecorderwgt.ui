@@ -188,6 +188,9 @@
            <iconset resource="buttons.qrc">
             <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
           </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -220,6 +223,9 @@
           <property name="icon">
            <iconset resource="buttons.qrc">
             <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -265,7 +271,7 @@
    <item>
     <widget class="QTabWidget" name="splitWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>

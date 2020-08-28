@@ -149,6 +149,7 @@ public:
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/Buttons/media-play-16.png"), QSize(), QIcon::Normal, QIcon::Off);
         pbStartServer->setIcon(icon);
+        pbStartServer->setCheckable(true);
 
         horizontalLayout_2->addWidget(pbStartServer);
 
@@ -161,6 +162,7 @@ public:
         pbConnectToServer->setEnabled(true);
         pbConnectToServer->setMaximumSize(QSize(80, 16777215));
         pbConnectToServer->setIcon(icon);
+        pbConnectToServer->setCheckable(true);
 
         horizontalLayout_2->addWidget(pbConnectToServer);
 
@@ -238,7 +240,7 @@ public:
 
         retranslateUi(IpRecorderWgt);
 
-        splitWidget->setCurrentIndex(2);
+        splitWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(IpRecorderWgt);

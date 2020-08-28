@@ -136,14 +136,8 @@ void  IpRecorderWgt::sl_newServerConnection()
 //=================================== Слот установки соединения сокета
 void IpRecorderWgt::sl_socketConnected()
 {
-//    mp_socket->open(QIODevice::ReadWrite);
-
     if (mp_playerForm) {
         mp_playerForm->setSocket(mp_socket);
-    }
-
-    if (mp_ui->pbConnectToServer->isChecked()) {
-        mp_ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
     }
 
     mp_ui->lbConnectionStatus->setText("Установлено соединение");
@@ -221,7 +215,9 @@ void IpRecorderWgt::m_updateUi(bool isServer, bool started)
     auto startIcon = QIcon(":/Buttons/media-play-16.png");
 
     mp_ui->pbStartServer->setIcon(isServer && started ? stopIcon : startIcon);
+    mp_ui->pbStartServer->setChecked(isServer && started);
     mp_ui->pbConnectToServer->setIcon(!isServer && started ? stopIcon : startIcon);
+    mp_ui->pbConnectToServer->setChecked(!isServer && started);
 }
 
 
