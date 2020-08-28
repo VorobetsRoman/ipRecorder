@@ -37,7 +37,6 @@ IpRecorderWgt::~IpRecorderWgt()
         }
         mp_socket->deleteLater();
     }
-    m_closeConnectionTimer();
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "ipRecorder");
     settings.setValue("port", mp_ui->lePortName->text());
     settings.setValue("host", mp_ui->leServerName->text());
@@ -55,14 +54,14 @@ void IpRecorderWgt::on_pbStartServer_released()
     // соответствующая radioButton
 
     if (mp_server) {    //Если сервер был запущен - выключить
-        mp_server->close();
-        mp_server->deleteLater();
-        mp_server = nullptr;
         if (mp_socket) {
             mp_socket->disconnect();
             mp_socket->deleteLater();
             mp_socket = nullptr;
         }
+        mp_server->close();
+        mp_server->deleteLater();
+        mp_server = nullptr;
 
         m_updateUi(true, false);
     } else {
@@ -99,12 +98,6 @@ void IpRecorderWgt::on_pbConnectToServer_released()
         mp_socket = nullptr;
 
         m_updateUi(false, false);
-
-        if (mp_connectionTimer) {
-            mp_connectionTimer->stop();
-            mp_connectionTimer->deleteLater();
-            mp_connectionTimer = nullptr;
-        }
     } else {
         mp_socket = new QTcpSocket();
         connect(mp_socket,          &QTcpSocket     ::connected,
@@ -114,13 +107,6 @@ void IpRecorderWgt::on_pbConnectToServer_released()
         connect(mp_socket,          &QTcpSocket     ::readyRead,
                 mp_recorderForm,    &RecorderForm   ::sl_writeToFile       );
         m_connectToHost();
-
-        if (!mp_connectionTimer) {
-            mp_connectionTimer = new QTimer();
-            connect(mp_connectionTimer, &QTimer         ::timeout,
-                    this,               &IpRecorderWgt  ::sl_connectionTimerTimeout);
-            mp_connectionTimer->start(200);
-        }
 
         m_updateUi(false, true);
     }
@@ -150,7 +136,7 @@ void  IpRecorderWgt::sl_newServerConnection()
 //=================================== Слот установки соединения сокета
 void IpRecorderWgt::sl_socketConnected()
 {
-    mp_socket->open(QIODevice::ReadWrite);
+//    mp_socket->open(QIODevice::ReadWrite);
 
     if (mp_playerForm) {
         mp_playerForm->setSocket(mp_socket);
@@ -183,19 +169,6 @@ void IpRecorderWgt::sl_socketDisconnected()
 
 
 
-//=================================== Слот таймера соединения
-void IpRecorderWgt::sl_connectionTimerTimeout()
-{
-    if (mp_socket->state() == QAbstractSocket::UnconnectedState) {
-        m_connectToHost();
-    } else if (mp_socket->state() == QAbstractSocket::ConnectedState) {
-        m_closeConnectionTimer();
-    }
-}
-
-
-
-
 //===================================
 void IpRecorderWgt::m_initSettings()
 {
@@ -219,32 +192,23 @@ void IpRecorderWgt::m_initSettings()
 //=================================== Функция соединения с сервером
 void IpRecorderWgt::m_connectToHost()
 {
-    bool success {true};
-    mp_socket->connectToHost(mp_ui->leServerName->text(),
-                             mp_ui->lePortName->text().toInt(&success, 10),
-                             QIODevice::ReadWrite);
-    if (!success) {
-        QMessageBox::warning(nullptr, "Ошибка", "Ошибочно указан порт");
+    if (mp_socket && mp_socket->state() != QAbstractSocket::ConnectedState) {
+        bool success {true};
+        mp_socket->connectToHost(mp_ui->leServerName->text(),
+                                 mp_ui->lePortName->text().toInt(&success, 10),
+                                 QIODevice::ReadWrite);
+        if (!success) {
+            QMessageBox::warning(nullptr, "Ошибка", "Ошибочно указан порт");
+        }
+        QTimer::singleShot(100, [=] {
+            m_connectToHost();
+        });
     }
 }
 
 
 
-
-//=================================== Функция закрытия сетевного соединения
-void IpRecorderWgt::m_closeConnectionTimer()
-{
-    // Функция закрытия таймера соединения
-    if (mp_connectionTimer) {
-        mp_connectionTimer->stop();
-        mp_connectionTimer->deleteLater();
-        mp_connectionTimer = nullptr;
-    }
-}
-
-
-
-
+// Реакция интерфейса на нажатие кнопок сервер/сокет
 //===================================
 void IpRecorderWgt::m_updateUi(bool isServer, bool started)
 {
