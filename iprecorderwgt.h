@@ -1,3 +1,7 @@
+/*!
+  * @file Форма основного окна, содержит вкладки
+  * с интерфейсами управления записью, воспроизведением, склеиванием файлов
+  */
 #ifndef IPRECORDERWGT_H
 #define IPRECORDERWGT_H
 
@@ -32,18 +36,22 @@ private slots:
     void sl_connectionTimerTimeout();
 
 private:
-    Ui::IpRecorderWgt   *mp_ui             {nullptr}; ///<
-    QTcpServer          *mp_server         {nullptr}; ///<
-    QTcpSocket          *mp_socket         {nullptr}; ///<
-    QTimer              *mp_connectionTimer{nullptr}; ///<
-    PlayerForm          *mp_playerForm     {nullptr}; ///<
-    RecorderForm        *mp_recorderForm   {nullptr}; ///<
+    Ui::IpRecorderWgt   *mp_ui             {nullptr}; ///< Форма окна
+    QTcpServer          *mp_server         {nullptr}; ///< Сервер
+    QTcpSocket          *mp_socket         {nullptr}; ///< Сокет
+    QTimer              *mp_connectionTimer{nullptr}; ///< Таймер соединения сокета
+    PlayerForm          *mp_playerForm     {nullptr}; ///< Форма управления воспроизведением
+    RecorderForm        *mp_recorderForm   {nullptr}; ///< Форма управления записью
 
-//    QTimer              m_temp;             ///< Timer for KDA
-
-    void m_closeConnectionTimer();
-    void m_connectToHost();
     void m_initSettings();
+    void m_connectToHost();
+    void m_closeConnectionTimer();
+    /*!
+     * \brief m_updateUi
+     * \param isServer
+     * \param started
+     */
+    void m_updateUi(bool isServer, bool started);
 };
 
 #endif // IPRECORDERWGT_H

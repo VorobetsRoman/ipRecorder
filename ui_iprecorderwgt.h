@@ -238,7 +238,7 @@ public:
 
         retranslateUi(IpRecorderWgt);
 
-        splitWidget->setCurrentIndex(1);
+        splitWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(IpRecorderWgt);

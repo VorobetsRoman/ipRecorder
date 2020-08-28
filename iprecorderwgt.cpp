@@ -19,28 +19,7 @@ IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
     mp_recorderForm = mp_ui->recorderWgt;
     mp_playerForm = mp_ui->playerWgt;
 
-//    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
     m_initSettings();
-}
-
-
-
-
-//===================================
-void IpRecorderWgt::m_initSettings()
-{
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "ipRecorder");
-
-    if (!settings.contains("port")) {
-        settings.setValue("port", "5000");
-    } else {
-        mp_ui->lePortName->setText(settings.value("port").toString());
-    }
-    if (!settings.contains("host")) {
-        settings.setValue("host", "127.0.0.1");
-    } else {
-        mp_ui->leServerName->setText(settings.value("address").toString());
-    }
 }
 
 
@@ -75,7 +54,7 @@ void IpRecorderWgt::on_pbStartServer_released()
     // Сервер включается только если нажата
     // соответствующая radioButton
 
-    if (mp_server) {
+    if (mp_server) {    //Если сервер был запущен - выключить
         mp_server->close();
         mp_server->deleteLater();
         mp_server = nullptr;
@@ -85,9 +64,7 @@ void IpRecorderWgt::on_pbStartServer_released()
             mp_socket = nullptr;
         }
 
-        mp_ui->pbStartServer->setIcon(QIcon(":/Buttons/media-play-16.png"));
-        mp_ui->pbConnectToServer->setEnabled(true);
-        mp_ui->lePortName->setEnabled(true);
+        m_updateUi(true, false);
     } else {
         mp_server = new QTcpServer();
         mp_server->setMaxPendingConnections(1);
@@ -104,9 +81,7 @@ void IpRecorderWgt::on_pbStartServer_released()
             return;
         }
 
-        mp_ui->pbStartServer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
-        mp_ui->pbConnectToServer->setEnabled(false);
-        mp_ui->lePortName->setEnabled(false);
+        m_updateUi(true, true);
     }
 }
 
@@ -118,13 +93,13 @@ void IpRecorderWgt::on_pbConnectToServer_released()
 {
     // Запуск или остановка сокетного соединения с сервером
     // Запуск производится только если отмечена соответствующая radioButton
-    if (mp_socket) {
+    if (mp_socket) {    //Если сокет был подключен - отключить
         mp_socket->disconnect();
         mp_socket->deleteLater();
         mp_socket = nullptr;
-        mp_ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-play-16.png"));
-        mp_ui->pbStartServer->setEnabled(true);
-        mp_ui->lePortName->setEnabled(true);
+
+        m_updateUi(false, false);
+
         if (mp_connectionTimer) {
             mp_connectionTimer->stop();
             mp_connectionTimer->deleteLater();
@@ -139,6 +114,7 @@ void IpRecorderWgt::on_pbConnectToServer_released()
         connect(mp_socket,          &QTcpSocket     ::readyRead,
                 mp_recorderForm,    &RecorderForm   ::sl_writeToFile       );
         m_connectToHost();
+
         if (!mp_connectionTimer) {
             mp_connectionTimer = new QTimer();
             connect(mp_connectionTimer, &QTimer         ::timeout,
@@ -146,9 +122,7 @@ void IpRecorderWgt::on_pbConnectToServer_released()
             mp_connectionTimer->start(200);
         }
 
-        mp_ui->pbStartServer->setEnabled(false);
-        mp_ui->pbConnectToServer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
-        mp_ui->lePortName->setEnabled(false);
+        m_updateUi(false, true);
     }
 }
 
@@ -188,14 +162,6 @@ void IpRecorderWgt::sl_socketConnected()
 
     mp_ui->lbConnectionStatus->setText("Установлено соединение");
     mp_ui->lbConnectionStatus->setStyleSheet("background-color: rgb(64, 152, 50);");
-
-//    m_temp.start(500);
-//    connect(&m_temp, &QTimer::timeout, [=] {
-//        static long code = 111;
-//        if (mp_socket->isOpen()) {
-//            mp_socket->write((const char*)&code, 4);
-//        }
-//    });
 }
 
 
@@ -230,6 +196,26 @@ void IpRecorderWgt::sl_connectionTimerTimeout()
 
 
 
+//===================================
+void IpRecorderWgt::m_initSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "ipRecorder");
+
+    if (!settings.contains("port")) {
+        settings.setValue("port", "5000");
+    } else {
+        mp_ui->lePortName->setText(settings.value("port").toString());
+    }
+    if (!settings.contains("host")) {
+        settings.setValue("host", "127.0.0.1");
+    } else {
+        mp_ui->leServerName->setText(settings.value("host").toString());
+    }
+}
+
+
+
+
 //=================================== Функция соединения с сервером
 void IpRecorderWgt::m_connectToHost()
 {
@@ -257,3 +243,24 @@ void IpRecorderWgt::m_closeConnectionTimer()
 }
 
 
+
+
+//===================================
+void IpRecorderWgt::m_updateUi(bool isServer, bool started)
+{
+    mp_ui->pbStartServer->setEnabled(isServer || !started);
+    mp_ui->pbConnectToServer->setEnabled(!isServer || !started);
+    mp_ui->lePortName->setEnabled(!started);
+    mp_ui->leServerName->setEnabled(!started);
+
+    auto stopIcon = QIcon(":/Buttons/media-stop-32.png");
+    auto startIcon = QIcon(":/Buttons/media-play-16.png");
+
+    mp_ui->pbStartServer->setIcon(isServer && started ? stopIcon : startIcon);
+    mp_ui->pbConnectToServer->setIcon(!isServer && started ? stopIcon : startIcon);
+}
+
+
+
+
+//===================================
