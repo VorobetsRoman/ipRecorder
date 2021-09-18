@@ -44,7 +44,11 @@ PlayerForm::~PlayerForm()
 void PlayerForm::on_tbFileNameForPlayer_released()
 {
     // Слот выбора файла для воспроизведения
-    QString fileName = QFileDialog::getOpenFileName(0, "Файл для чтения", qApp->applicationDirPath(), "*.dat");
+    QString fileName = QFileDialog::getOpenFileName(
+                nullptr
+                , QStringLiteral("Файл для чтения")
+                , qApp->applicationDirPath()
+                , "*.dat");
     if (fileName == "") return;
 
     if (!mp_workFile) {
@@ -58,7 +62,10 @@ void PlayerForm::on_tbFileNameForPlayer_released()
 //    QFile test(fileName);
     mp_workFile->setFileName(fileName);
     if (!mp_workFile->open(QIODevice::ReadOnly)) {
-        QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
+        QMessageBox::warning(
+                    nullptr
+                    , QStringLiteral("Ошибка файла")
+                    , QStringLiteral("Файл не открывается для записи"));
         return;
     }
 
@@ -139,16 +146,18 @@ void PlayerForm::on_pbStartStopPlayer_released()
 
     if (m_playingIsOn)
     {
-        mp_ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-play-16.png"));
+        mp_ui->pbStartStopPlayer->setIcon(
+                    QIcon(QStringLiteral(":/Buttons/media-play-16.png")));
         mp_workFile->close();
         if (mp_playTimer) {
             mp_playTimer->stop();
         }
     } else {
-        mp_ui->pbStartStopPlayer->setIcon(QIcon(":/Buttons/media-stop-32.png"));
+        mp_ui->pbStartStopPlayer->setIcon(
+                    QIcon(QStringLiteral(":/Buttons/media-stop-32.png")));
         if (!mp_workFile->isOpen()) {
             if (!mp_workFile->open(QIODevice::ReadOnly)) {
-                qDebug() << "file open is unsuccessfully";
+                qDebug() << QStringLiteral("file open is unsuccessfully");
                 return;
             }
         }

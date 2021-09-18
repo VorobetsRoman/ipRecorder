@@ -37,7 +37,9 @@ IpRecorderWgt::~IpRecorderWgt()
         }
         mp_socket->deleteLater();
     }
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "ipRecorder");
+    QSettings settings(QSettings::IniFormat
+                       , QSettings::UserScope
+                       , QStringLiteral("ipRecorder"));
     settings.setValue("port", mp_ui->lePortName->text());
     settings.setValue("host", mp_ui->leServerName->text());
     delete mp_ui;
@@ -74,7 +76,10 @@ void IpRecorderWgt::on_pbStartServer_released()
         bool success {true};
         mp_server->listen(QHostAddress::Any, mp_ui->lePortName->text().toInt(&success, 10));
         if (!success) {
-            QMessageBox::warning(0, "Ошибка запуска сервера", mp_server->errorString());
+            QMessageBox::warning(
+                        nullptr
+                        , QStringLiteral("Ошибка запуска сервера")
+                        , mp_server->errorString());
             mp_server->deleteLater();
             mp_server = nullptr;
             return;
@@ -140,8 +145,10 @@ void IpRecorderWgt::sl_socketConnected()
         mp_playerForm->setSocket(mp_socket);
     }
 
-    mp_ui->lbConnectionStatus->setText("Установлено соединение");
-    mp_ui->lbConnectionStatus->setStyleSheet("background-color: rgb(64, 152, 50);");
+    mp_ui->lbConnectionStatus->setText(
+                QStringLiteral("Установлено соединение"));
+    mp_ui->lbConnectionStatus->setStyleSheet(
+                QStringLiteral("background-color: rgb(64, 152, 50);"));
 }
 
 
@@ -156,8 +163,10 @@ void IpRecorderWgt::sl_socketDisconnected()
     if (mp_playerForm) {                   //убрать?
         mp_playerForm->setSocket(nullptr); //убрать?
     }
-    mp_ui->lbConnectionStatus->setText("Соединение потеряно");
-    mp_ui->lbConnectionStatus->setStyleSheet("background-color: rgb(211, 36, 54);");
+    mp_ui->lbConnectionStatus->setText(
+                QStringLiteral("Соединение потеряно"));
+    mp_ui->lbConnectionStatus->setStyleSheet(
+                QStringLiteral("background-color: rgb(211, 36, 54);"));
 }
 
 
@@ -171,8 +180,10 @@ void IpRecorderWgt::sl_serverDisconnected()
     if (mp_playerForm) {                   //убрать?
         mp_playerForm->setSocket(nullptr); //убрать?
     }
-    mp_ui->lbConnectionStatus->setText("Соединение потеряно");
-    mp_ui->lbConnectionStatus->setStyleSheet("background-color: rgb(211, 36, 54);");
+    mp_ui->lbConnectionStatus->setText(
+                QStringLiteral("Соединение потеряно"));
+    mp_ui->lbConnectionStatus->setStyleSheet(
+                QStringLiteral("background-color: rgb(211, 36, 54);"));
 }
 
 
@@ -181,15 +192,17 @@ void IpRecorderWgt::sl_serverDisconnected()
 //===================================
 void IpRecorderWgt::m_initSettings()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "ipRecorder");
+    QSettings settings(QSettings::IniFormat
+                       , QSettings::UserScope
+                       , QStringLiteral("ipRecorder"));
 
-    if (!settings.contains("port")) {
-        settings.setValue("port", "5000");
+    if (!settings.contains(QStringLiteral("port"))) {
+        settings.setValue(QStringLiteral("port"), QStringLiteral("5000"));
     } else {
         mp_ui->lePortName->setText(settings.value("port").toString());
     }
-    if (!settings.contains("host")) {
-        settings.setValue("host", "127.0.0.1");
+    if (!settings.contains(QStringLiteral("host"))) {
+        settings.setValue(QStringLiteral("host"), QStringLiteral("127.0.0.1"));
     } else {
         mp_ui->leServerName->setText(settings.value("host").toString());
     }
@@ -207,7 +220,10 @@ void IpRecorderWgt::m_connectToHost()
                                  mp_ui->lePortName->text().toInt(&success, 10),
                                  QIODevice::ReadWrite);
         if (!success) {
-            QMessageBox::warning(nullptr, "Ошибка", "Ошибочно указан порт");
+            QMessageBox::warning(
+                        nullptr
+                        , QStringLiteral("Ошибка")
+                        , QStringLiteral("Ошибочно указан порт"));
         }
         QTimer::singleShot(100, [=] {
             m_connectToHost();
@@ -226,8 +242,8 @@ void IpRecorderWgt::m_updateUi(bool isServer, bool started)
     mp_ui->lePortName->setEnabled(!started);
     mp_ui->leServerName->setEnabled(!started);
 
-    auto stopIcon = QIcon(":/Buttons/media-stop-32.png");
-    auto startIcon = QIcon(":/Buttons/media-play-16.png");
+    auto stopIcon = QIcon(QStringLiteral(":/Buttons/media-stop-32.png"));
+    auto startIcon = QIcon(QStringLiteral(":/Buttons/media-play-16.png"));
 
     mp_ui->pbStartServer->setIcon(isServer && started ? stopIcon : startIcon);
     mp_ui->pbStartServer->setChecked(isServer && started);

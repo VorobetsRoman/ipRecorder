@@ -38,7 +38,11 @@ RecorderForm::~RecorderForm()
 void RecorderForm::on_tbFileNameForRecording_released()
 {
     // Слот выбора файла для записи
-    QString fileName = QFileDialog::getSaveFileName(0, "Файл для записи", qApp->applicationDirPath(), "*.dat");
+    QString fileName = QFileDialog::getSaveFileName(
+                nullptr
+                , QStringLiteral("Файл для записи")
+                , qApp->applicationDirPath()
+                , "*.dat");
     if (fileName == "") return;
 
     if (!mp_workFile) {
@@ -51,7 +55,10 @@ void RecorderForm::on_tbFileNameForRecording_released()
 
     mp_workFile->setFileName(fileName);
     if (!mp_workFile->open(QIODevice::WriteOnly)) {
-        QMessageBox::warning(0, "Ошибка файла", "Файл не открывается для записи");
+        QMessageBox::warning(
+                    nullptr
+                    , QStringLiteral("Ошибка файла")
+                    , QStringLiteral("Файл не открывается для записи"));
         return;
     }
 
@@ -66,7 +73,7 @@ void RecorderForm::on_pbStartStopRecord_released()
 {
     // По нажатию на кнопку "старт" файл пишется с начала
     if (m_recordingIsOn) {
-        mp_ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-record-16.png"));
+        mp_ui->pbStartStopRecord->setIcon(QIcon(QStringLiteral(":/Buttons/media-record-16.png")));
         mp_ui->cbTimeMarker->setEnabled(true);
         mp_ui->cbCompression->setEnabled(true);
         if (mp_workFile && mp_workFile->isOpen()) {
@@ -77,7 +84,7 @@ void RecorderForm::on_pbStartStopRecord_released()
             delete mp_recordTimer;
         }
     } else {
-        mp_ui->pbStartStopRecord->setIcon(QIcon(":/Buttons/media-stop-32.png"));
+        mp_ui->pbStartStopRecord->setIcon(QIcon(QStringLiteral(":/Buttons/media-stop-32.png")));
         mp_ui->cbTimeMarker->setEnabled(false);
         mp_ui->cbCompression->setEnabled(false);
         if (mp_workFile && !mp_workFile->isOpen()) {
@@ -171,7 +178,7 @@ void RecorderForm::m_initRecordTimer()
 {
     mp_recordTimer = new QTimer();
     mp_recordTimer->setInterval(1);
-    connect(mp_recordTimer, &QTimer::timeout, [=] {
+    connect(mp_recordTimer, &QTimer::timeout, this, [=] {
         auto time = QTime::fromMSecsSinceStartOfDay(m_lastTime.msecsTo(QTime::currentTime()));
         mp_ui->lb_recTime->setText(time.toString("hh:mm:ss:zzz"));
     });
