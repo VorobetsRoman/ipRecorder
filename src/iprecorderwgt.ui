@@ -185,7 +185,7 @@
            <string>Сервер</string>
           </property>
           <property name="icon">
-           <iconset resource="buttons.qrc">
+           <iconset>
             <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
           </property>
           <property name="checkable">
@@ -221,7 +221,7 @@
            <string>Клиент</string>
           </property>
           <property name="icon">
-           <iconset resource="buttons.qrc">
+           <iconset>
             <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
           </property>
           <property name="checkable">
@@ -278,7 +278,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="icon">
-       <iconset resource="buttons.qrc">
+       <iconset>
         <normaloff>:/Buttons/media-record-16.png</normaloff>:/Buttons/media-record-16.png</iconset>
       </attribute>
       <attribute name="title">
@@ -292,7 +292,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="icon">
-       <iconset resource="buttons.qrc">
+       <iconset>
         <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
       </attribute>
       <attribute name="title">
@@ -323,24 +323,22 @@
   <customwidget>
    <class>RecorderForm</class>
    <extends>QWidget</extends>
-   <header location="global">recorderform.h</header>
+   <header location="global">src/recorderform.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>PlayerForm</class>
    <extends>QWidget</extends>
-   <header location="global">playerform.h</header>
+   <header location="global">src/playerform.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>SplitForm</class>
    <extends>QWidget</extends>
-   <header location="global">splitform.h</header>
+   <header location="global">src/splitform.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="buttons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
