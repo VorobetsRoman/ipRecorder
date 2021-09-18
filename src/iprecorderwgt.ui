@@ -185,7 +185,7 @@
            <string>Сервер</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res/buttons.qrc">
             <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
           </property>
           <property name="checkable">
@@ -221,7 +221,7 @@
            <string>Клиент</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res/buttons.qrc">
             <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
           </property>
           <property name="checkable">
@@ -278,7 +278,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="icon">
-       <iconset>
+       <iconset resource="../res/buttons.qrc">
         <normaloff>:/Buttons/media-record-16.png</normaloff>:/Buttons/media-record-16.png</iconset>
       </attribute>
       <attribute name="title">
@@ -292,7 +292,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="icon">
-       <iconset>
+       <iconset resource="../res/buttons.qrc">
         <normaloff>:/Buttons/media-play-16.png</normaloff>:/Buttons/media-play-16.png</iconset>
       </attribute>
       <attribute name="title">
@@ -339,6 +339,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../res/buttons.qrc"/>
+ </resources>
  <connections/>
 </ui>

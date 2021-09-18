@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>262</width>
-    <height>170</height>
+    <width>303</width>
+    <height>177</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -103,7 +103,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="buttons.qrc">
+        <iconset resource="../res/buttons.qrc">
          <normaloff>:/Buttons/media-play-16.png</normaloff>
          <normalon>:/Buttons/media-stop-32.png</normalon>:/Buttons/media-play-16.png</iconset>
        </property>
@@ -121,7 +121,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="buttons.qrc">
+        <iconset resource="../res/buttons.qrc">
          <normaloff>:/Buttons/media-pause-16.png</normaloff>:/Buttons/media-pause-16.png</iconset>
        </property>
       </widget>
@@ -138,7 +138,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="buttons.qrc"/>
+  <include location="../res/buttons.qrc"/>
  </resources>
  <connections/>
 </ui>
