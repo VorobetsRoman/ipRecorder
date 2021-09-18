@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/Buttons">
+        <file>media-pause-16.png</file>
+        <file>media-play-16.png</file>
+        <file>media-stop-32.png</file>
+        <file>media-record-16.png</file>
+    </qresource>
+</RCC>
