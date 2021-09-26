@@ -1,6 +1,31 @@
-#ifndef FILEHEADER_H
-#define FILEHEADER_H
+;;./M/pP'[''
+]]P
+P]
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+']
+'
+'9
+[
+'
+\\\\#ifndef FILEHEADER_H
+#define FILEHEADER_H
+l
 #include <QtGlobal>
 
 // Заголовок файла с данными. Содержит информацию о наличии временного маркера.
@@ -17,4 +42,29 @@ struct FileHeader {
     }
 };
 
-#endif // FILEHEADER_H
+#endif // FI
+
+
+
+ v                         M/L/
+ ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ;.alignas (;[[
+ [
+ ][
+L ]
+ ]
+ ])

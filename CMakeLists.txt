@@ -20,6 +20,7 @@ set(PROJECT_SOURCES
         src/playerform.cpp src/playerform.h src/playerform.ui
         src/recorderform.cpp src/recorderform.h src/recorderform.ui
         src/splitform.cpp src/splitform.h src/splitform.ui
+        src/netpeer.h src/netpeer.cpp
         res/buttons.qrc
 )
 

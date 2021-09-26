@@ -12,3 +12,4 @@ SplitForm::~SplitForm()
 {
     delete mp_ui;
 }
+    qqqqqqqqqqaffggi999999oooll,kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkjgfdfdddx                   harts5ssdud6ytuguuuuuhym,nmnvnbc
