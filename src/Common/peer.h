@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include <QObject>
-#include <QAbstractSocket>
+#include <QTcpSocket>
 
 class Peer : public QObject
 {
@@ -14,6 +14,12 @@ public:
                                 , const QString &host = 0) = 0;
 signals:
     void sg_connectionState(QAbstractSocket::SocketState);
+
+protected slots:
+    void sl_readyRead();
+
+protected:
+    QSharedPointer<QTcpSocket> m_socket;    ///< Указатель на сокет
 };
 
 #endif // PEER_H

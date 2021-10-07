@@ -7,12 +7,15 @@ ServerPeer(QObject *parent)
 
 }
 
-void ServerPeer::initConnection(const int &port, const QString &host)
+void ServerPeer::
+initConnection(const int &port
+               , const QString &host)
 {
     m_initServer(port);
 }
 
-void ServerPeer::m_initServer(const int &port)
+void ServerPeer::
+m_initServer(const int &port)
 {
     m_server = QSharedPointer<QTcpServer>(
                 new QTcpServer, &QObject::deleteLater);
@@ -29,8 +32,13 @@ void ServerPeer::m_initServer(const int &port)
     });
 }
 
-void ServerPeer::m_initSocket()
+void ServerPeer::
+m_initSocket()
 {
     connect(m_socket.data(), &QTcpSocket::stateChanged,
             this, &ServerPeer::sg_connectionState);
+    connect(m_socket.data(), &QTcpSocket::disconnected,
+            this,   [=]{m_socket.clear();});
+    connect(m_socket.data(), &QTcpSocket::readyRead,
+            this, &ServerPeer::sl_readyRead);
 }

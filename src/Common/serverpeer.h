@@ -16,7 +16,6 @@ public:
 public:
     void initConnection(const int &port, const QString &host);
     QSharedPointer<QTcpServer> m_server;    ///< Указатель на сервер
-    QSharedPointer<QTcpSocket> m_socket;    ///< Указатель на сокет
 
 private:
     void m_initServer(const int &port);
