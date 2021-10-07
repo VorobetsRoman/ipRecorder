@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QSettings>
+#include "Common/usersettings.h"
 
 
 
@@ -40,20 +41,14 @@ void IpRecorderWgt::on_pbConnectToServer_released()
 
 void IpRecorderWgt::m_initSettings()
 {
-    QSettings settings(QSettings::IniFormat
-                       , QSettings::UserScope
-                       , QStringLiteral("ipRecorder"));
-
-    if (!settings.contains(QStringLiteral("port"))) {
-        settings.setValue(QStringLiteral("port"), QStringLiteral("5000"));
-    } else {
-        mp_ui->lePortName->setText(settings.value("port").toString());
-    }
-    if (!settings.contains(QStringLiteral("host"))) {
-        settings.setValue(QStringLiteral("host"), QStringLiteral("127.0.0.1"));
-    } else {
-        mp_ui->leServerName->setText(settings.value("host").toString());
-    }
+    mp_ui->lePortName->setText(
+                UserSettings::valueFor(
+                    QStringLiteral("port")
+                    , QStringLiteral("5000")).toString());
+    mp_ui->leServerName->setText(
+                UserSettings::valueFor(
+                    QStringLiteral("host")
+                    , QStringLiteral("127.0.0.1")).toString());
 }
 
 void IpRecorderWgt::m_updateUi(bool isServer, bool started)
@@ -74,9 +69,8 @@ void IpRecorderWgt::m_updateUi(bool isServer, bool started)
 
 void IpRecorderWgt::m_storeSettings()
 {
-    QSettings settings(QSettings::IniFormat
-                       , QSettings::UserScope
-                       , QStringLiteral("ipRecorder"));
-    settings.setValue("port", mp_ui->lePortName->text());
-    settings.setValue("host", mp_ui->leServerName->text());
+    UserSettings::store(QStringLiteral("port")
+                        , mp_ui->lePortName->text());
+    UserSettings::store(QStringLiteral("host")
+                        , mp_ui->leServerName->text());
 }
