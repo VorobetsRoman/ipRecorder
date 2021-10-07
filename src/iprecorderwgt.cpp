@@ -22,42 +22,22 @@ IpRecorderWgt::IpRecorderWgt(QWidget *parent) :
     m_initSettings();
 }
 
-
-
-
-//=================================== Деструктор
 IpRecorderWgt::~IpRecorderWgt()
 {
-    QSettings settings(QSettings::IniFormat
-                       , QSettings::UserScope
-                       , QStringLiteral("ipRecorder"));
-    settings.setValue("port", mp_ui->lePortName->text());
-    settings.setValue("host", mp_ui->leServerName->text());
+    m_storeSettings();
     delete mp_ui;
 }
 
-
-
-
-//=================================== Кнопка старт сервера
 void IpRecorderWgt::on_pbStartServer_released()
 {
 
 }
 
-
-
-
-//=================================== Кнопка подключиться к серверу
 void IpRecorderWgt::on_pbConnectToServer_released()
 {
 
 }
 
-
-
-
-//===================================
 void IpRecorderWgt::m_initSettings()
 {
     QSettings settings(QSettings::IniFormat
@@ -76,11 +56,6 @@ void IpRecorderWgt::m_initSettings()
     }
 }
 
-
-
-
-// Реакция интерфейса на нажатие кнопок сервер/сокет
-//===================================
 void IpRecorderWgt::m_updateUi(bool isServer, bool started)
 {
     mp_ui->pbStartServer->setEnabled(isServer || !started);
@@ -97,7 +72,11 @@ void IpRecorderWgt::m_updateUi(bool isServer, bool started)
     mp_ui->pbConnectToServer->setChecked(!isServer && started);
 }
 
-
-
-
-//===================================
+void IpRecorderWgt::m_storeSettings()
+{
+    QSettings settings(QSettings::IniFormat
+                       , QSettings::UserScope
+                       , QStringLiteral("ipRecorder"));
+    settings.setValue("port", mp_ui->lePortName->text());
+    settings.setValue("host", mp_ui->leServerName->text());
+}

@@ -35,6 +35,7 @@ private:
 
     void m_initSettings();
     void m_updateUi(bool isServer, bool started);
+    void m_storeSettings();
 };
 
 #endif // IPRECORDERWGT_H

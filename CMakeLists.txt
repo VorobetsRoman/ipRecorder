@@ -23,6 +23,7 @@ set(PROJECT_SOURCES
         src/Common/peer.h src/Common/peer.cpp
         src/Common/socketpeer.h src/Common/socketpeer.cpp
         src/Common/serverpeer.h src/Common/serverpeer.cpp
+        src/Common/usersettings.h src/Common/usersettings.cpp
         res/buttons.qrc
 )
 
