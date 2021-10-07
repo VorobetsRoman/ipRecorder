@@ -15,7 +15,7 @@ NetPeer(QObject *parent)
 
 
 void NetPeer::
-m_initSocket(const int &port
+p_initSocket(const int &port
              , const QString &host)
 {
     m_socket = QSharedPointer<QTcpSocket>(

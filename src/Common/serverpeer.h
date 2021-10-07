@@ -19,7 +19,6 @@ public:
 
 private:
     void m_initServer(const int &port);
-    void m_initSocket();
 };
 
 #endif // SERVERPEER_H

@@ -20,6 +20,8 @@ protected slots:
 
 protected:
     QSharedPointer<QTcpSocket> m_socket;    ///< Указатель на сокет
+
+    void p_initSocket();
 };
 
 #endif // PEER_H

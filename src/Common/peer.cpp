@@ -13,3 +13,14 @@ sl_readyRead()
 {
     qDebug() << "ready read";
 }
+
+void Peer::
+p_initSocket()
+{
+    connect(m_socket.data(), &QTcpSocket::stateChanged,
+            this, &Peer::sg_connectionState);
+    connect(m_socket.data(), &QTcpSocket::disconnected,
+            this,   [=]{m_socket.clear();});
+    connect(m_socket.data(), &QTcpSocket::readyRead,
+            this, &Peer::sl_readyRead);
+}

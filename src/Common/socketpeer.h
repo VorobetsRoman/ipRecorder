@@ -14,8 +14,6 @@ public:
     // Peer interface
 public:
     void initConnection(const int &port, const QString &host);
-//signals:
-//    void sg_connectionState(QAbstractSocket::SocketState);
 
 private:
     QSharedPointer<QTcpSocket> m_socket;    ///< Указатель на сокет

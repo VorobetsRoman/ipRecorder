@@ -20,8 +20,7 @@ m_initSocket(const int &port
 {
     m_socket = QSharedPointer<QTcpSocket>(
                 new QTcpSocket, &QObject::deleteLater);
-    connect(m_socket.data(),    &QTcpSocket::stateChanged,
-            this,               &SocketPeer::sg_connectionState);
+    p_initSocket();
     m_connectToHost(port, host);
 }
 

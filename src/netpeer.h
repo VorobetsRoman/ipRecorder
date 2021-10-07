@@ -18,7 +18,7 @@ private:
      * \param port
      * \param host
      */
-    void m_initSocket(const int &port
+    void p_initSocket(const int &port
                       , const QString &host);
     void m_initServer(const int &port);
     /*!
