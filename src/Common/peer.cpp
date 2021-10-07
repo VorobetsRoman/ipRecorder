@@ -1,6 +1,8 @@
 #include "peer.h"
 
-Peer::Peer()
+Peer::
+Peer(QObject *parent)
+    : QObject(parent)
 {
 
 }

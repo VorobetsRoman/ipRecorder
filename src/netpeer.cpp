@@ -6,7 +6,7 @@
 
 NetPeer::
 NetPeer(QObject *parent)
-    : QObject(parent)
+    : Peer(parent)
 {
 
 }

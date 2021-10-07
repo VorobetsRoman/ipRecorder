@@ -1,12 +1,11 @@
 #ifndef NETPEER_H
 #define NETPEER_H
 
-#include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include "Common/peer.h"
 
-class NetPeer : public QObject, public Peer
+class NetPeer : public Peer
 {
 public:
     NetPeer(QObject *parent = nullptr);

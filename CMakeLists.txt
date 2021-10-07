@@ -22,6 +22,8 @@ set(PROJECT_SOURCES
         src/splitform.cpp src/splitform.h src/splitform.ui
         src/netpeer.h src/netpeer.cpp
         src/Common/peer.h src/Common/peer.cpp
+        src/Common/socketpeer.h src/Common/socketpeer.cpp
+        src/Common/serverpeer.h src/Common/serverpeer.cpp
         res/buttons.qrc
 )
 
