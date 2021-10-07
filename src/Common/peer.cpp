@@ -12,6 +12,8 @@ void Peer::
 sl_readyRead()
 {
     qDebug() << "ready read";
+    auto incomingData = m_socket.data()->readAll();
+    emit sg_incomingData(incomingData);
 }
 
 void Peer::

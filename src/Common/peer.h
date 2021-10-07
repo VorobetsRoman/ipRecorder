@@ -14,6 +14,7 @@ public:
                                 , const QString &host = 0) = 0;
 signals:
     void sg_connectionState(QAbstractSocket::SocketState);
+    void sg_incomingData(QByteArray &ba);
 
 protected slots:
     void sl_readyRead();
