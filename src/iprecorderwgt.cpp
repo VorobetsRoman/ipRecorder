@@ -31,12 +31,16 @@ IpRecorderWgt::~IpRecorderWgt()
 
 void IpRecorderWgt::on_pbStartServer_released()
 {
-
+    m_peer.clear();
+    m_peer = QSharedPointer<Peer>(new ServerPeer
+                                  , &QObject::deleteLater);
 }
 
 void IpRecorderWgt::on_pbConnectToServer_released()
 {
-
+    m_peer.clear();
+    m_peer = QSharedPointer<Peer>(new SocketPeer
+                                  , &QObject::deleteLater);
 }
 
 void IpRecorderWgt::m_initSettings()

@@ -11,7 +11,7 @@ class ServerPeer : public Peer
     Q_OBJECT
 public:
     ServerPeer(QObject *parent = nullptr);
-
+    ~ServerPeer();
     // Peer interface
 public:
     void initConnection(const int &port, const QString &host);

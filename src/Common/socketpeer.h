@@ -10,7 +10,7 @@ class SocketPeer : public Peer
     Q_OBJECT
 public:
     SocketPeer(QObject *parent = nullptr);
-
+    ~SocketPeer();
     // Peer interface
 public:
     void initConnection(const int &port, const QString &host);

@@ -10,6 +10,8 @@
 #include <QFile>
 #include "playerform.h"
 #include "recorderform.h"
+#include "Common/socketpeer.h"
+#include "Common/serverpeer.h"
 
 
 namespace Ui {
@@ -32,6 +34,7 @@ private:
     Ui::IpRecorderWgt   *mp_ui             {nullptr}; ///< Форма окна
     PlayerForm          *mp_playerForm     {nullptr}; ///< Форма управления воспроизведением
     RecorderForm        *mp_recorderForm   {nullptr}; ///< Форма управления записью
+    QSharedPointer <Peer> m_peer;
 
     void m_initSettings();
     void m_updateUi(bool isServer, bool started);

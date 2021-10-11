@@ -6,10 +6,10 @@
 class UserSettings
 {
 public:
-    inline static void store(const QString &key
-                             , const QVariant& value);
-    inline static QVariant valueFor(const QString &key
-                                    , const QVariant& value = 0);
+    static void store(const QString &key
+                      , const QVariant& value);
+    static QVariant valueFor(const QString &key
+                             , const QVariant& value = 0);
 
 private:
     UserSettings(){};

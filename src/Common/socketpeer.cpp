@@ -1,10 +1,16 @@
 #include "socketpeer.h"
+#include <QDebug>
 
 SocketPeer::
 SocketPeer(QObject *parent)
     : Peer(parent)
 {
+    qDebug() << "socket started";
+}
 
+SocketPeer::~SocketPeer()
+{
+    qDebug() << "socket stopped";
 }
 
 void SocketPeer::

@@ -1,10 +1,16 @@
 #include "serverpeer.h"
+#include <QDebug>
 
 ServerPeer::
 ServerPeer(QObject *parent)
     : Peer(parent)
 {
+    qDebug() << "server started";
+}
 
+ServerPeer::~ServerPeer()
+{
+    qDebug() << "server is stopped";
 }
 
 void ServerPeer::
