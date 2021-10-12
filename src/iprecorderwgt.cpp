@@ -1,6 +1,5 @@
 #include "iprecorderwgt.h"
 #include "ui_iprecorderwgt.h"
-//#include <QTextCodec>
 #include <QDebug>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -31,10 +30,12 @@ IpRecorderWgt::~IpRecorderWgt()
 
 void IpRecorderWgt::on_pbStartServer_released()
 {
-    m_peer.clear();
-    m_peer = QSharedPointer<Peer>(new ServerPeer
-                                  , &QObject::deleteLater);
-    m_updateUi(true, true);
+    if (m_peer.isNull()) {
+        m_peer = QSharedPointer<Peer>(new ServerPeer
+                                      , &QObject::deleteLater);
+    } else {
+        m_peer.clear();
+    }
 }
 
 void IpRecorderWgt::on_pbConnectToServer_released()
