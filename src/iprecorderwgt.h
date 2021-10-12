@@ -12,6 +12,7 @@
 #include "recorderform.h"
 #include "Common/socketpeer.h"
 #include "Common/serverpeer.h"
+//#include "peeruifacade.h"
 
 
 namespace Ui {
@@ -37,7 +38,6 @@ private:
     QSharedPointer <Peer> m_peer;
 
     void m_initSettings();
-    void m_updateUi(bool isServer, bool started);
     void m_storeSettings();
 };
 

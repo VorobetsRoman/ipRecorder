@@ -31,19 +31,24 @@ IpRecorderWgt::~IpRecorderWgt()
 void IpRecorderWgt::on_pbStartServer_released()
 {
     if (m_peer.isNull()) {
-        m_peer = QSharedPointer<Peer>(new ServerPeer
-                                      , &QObject::deleteLater);
+        m_peer = QSharedPointer<Peer>(
+                    new ServerPeer
+                    , &QObject::deleteLater);
     } else {
+        mp_ui->lbConnectionStatus->setText(QStringLiteral("Empty"));
         m_peer.clear();
     }
 }
 
 void IpRecorderWgt::on_pbConnectToServer_released()
 {
-    m_peer.clear();
-    m_peer = QSharedPointer<Peer>(new SocketPeer
-                                  , &QObject::deleteLater);
-    m_updateUi(false, true);
+    if (m_peer.isNull()) {
+        m_peer = QSharedPointer<Peer>(
+                    new SocketPeer
+                    , &QObject::deleteLater);
+    } else {
+        m_peer.clear();
+    }
 }
 
 void IpRecorderWgt::m_initSettings()
@@ -56,22 +61,6 @@ void IpRecorderWgt::m_initSettings()
                 UserSettings::valueFor(
                     QStringLiteral("host")
                     , QStringLiteral("127.0.0.1")).toString());
-}
-
-void IpRecorderWgt::m_updateUi(bool isServer, bool started)
-{
-    mp_ui->pbStartServer->setEnabled(isServer || !started);
-    mp_ui->pbConnectToServer->setEnabled(!isServer || !started);
-    mp_ui->lePortName->setEnabled(!started);
-    mp_ui->leServerName->setEnabled(!started);
-
-    auto stopIcon = QIcon(QStringLiteral(":/Buttons/media-stop-32.png"));
-    auto startIcon = QIcon(QStringLiteral(":/Buttons/media-play-16.png"));
-
-    mp_ui->pbStartServer->setIcon(isServer && started ? stopIcon : startIcon);
-    mp_ui->pbStartServer->setChecked(isServer && started);
-    mp_ui->pbConnectToServer->setIcon(!isServer && started ? stopIcon : startIcon);
-    mp_ui->pbConnectToServer->setChecked(!isServer && started);
 }
 
 void IpRecorderWgt::m_storeSettings()
