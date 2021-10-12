@@ -47,6 +47,7 @@ void IpRecorderWgt::on_pbConnectToServer_released()
                     new SocketPeer
                     , &QObject::deleteLater);
     } else {
+        mp_ui->lbConnectionStatus->setText(QStringLiteral("Empty"));
         m_peer.clear();
     }
 }
@@ -69,4 +70,9 @@ void IpRecorderWgt::m_storeSettings()
                         , mp_ui->lePortName->text());
     UserSettings::store(QStringLiteral("host")
                         , mp_ui->leServerName->text());
+}
+
+void IpRecorderWgt::m_updateUi()
+{
+
 }

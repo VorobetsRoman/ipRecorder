@@ -39,6 +39,7 @@ private:
 
     void m_initSettings();
     void m_storeSettings();
+    void m_updateUi();
 };
 
 #endif // IPRECORDERWGT_H
