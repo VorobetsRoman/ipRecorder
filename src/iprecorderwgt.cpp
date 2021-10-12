@@ -34,6 +34,7 @@ void IpRecorderWgt::on_pbStartServer_released()
     m_peer.clear();
     m_peer = QSharedPointer<Peer>(new ServerPeer
                                   , &QObject::deleteLater);
+    m_updateUi(true, true);
 }
 
 void IpRecorderWgt::on_pbConnectToServer_released()
@@ -41,6 +42,7 @@ void IpRecorderWgt::on_pbConnectToServer_released()
     m_peer.clear();
     m_peer = QSharedPointer<Peer>(new SocketPeer
                                   , &QObject::deleteLater);
+    m_updateUi(false, true);
 }
 
 void IpRecorderWgt::m_initSettings()
