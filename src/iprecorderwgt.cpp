@@ -32,7 +32,7 @@ void IpRecorderWgt::on_pbStartServer_released()
 {
     if (m_peer.isNull()) {
         m_peer = QSharedPointer<Peer>(
-                    new ServerPeer
+                    new ServerPeer(this)
                     , &QObject::deleteLater);
     } else {
         mp_ui->lbConnectionStatus->setText(QStringLiteral("Empty"));
@@ -44,7 +44,7 @@ void IpRecorderWgt::on_pbConnectToServer_released()
 {
     if (m_peer.isNull()) {
         m_peer = QSharedPointer<Peer>(
-                    new SocketPeer
+                    new SocketPeer(this)
                     , &QObject::deleteLater);
     } else {
         mp_ui->lbConnectionStatus->setText(QStringLiteral("Empty"));
